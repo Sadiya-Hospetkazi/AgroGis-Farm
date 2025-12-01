@@ -199,6 +199,15 @@ function initializeDashboard() {
     // Any dashboard-specific initialization code would go here
 }
 
+// Define base API URL - use production URL if available, otherwise localhost
+const BASE_API_URL = window.location.hostname.includes('railway.app') 
+  ? `https://${window.location.hostname}` 
+  : window.location.hostname.includes('vercel.app')
+  ? `https://${window.location.hostname}`
+  : 'http://localhost:3001';
+
+console.log('Using API base URL:', BASE_API_URL);
+
 // Fetch user data to display personalized greeting
 function fetchUserData() {
     if (!authToken) {
@@ -206,7 +215,7 @@ function fetchUserData() {
         return;
     }
     
-    fetch('http://localhost:3001/api/protected/dashboard', {
+    fetch(`${BASE_API_URL}/api/protected/dashboard`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -255,7 +264,7 @@ function logAction(actionType) {
             const farmerId = data.data.farmer.id;
             
             // Now log the action with the farmer ID
-            return fetch('http://localhost:3001/api/actions/log', {
+            return fetch(`${BASE_API_URL}/api/actions/log`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -376,7 +385,7 @@ function loadInsightsPage() {
         return;
     }
     
-    fetch('http://localhost:3001/api/protected/dashboard', {
+    fetch(`${BASE_API_URL}/api/protected/dashboard`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -391,7 +400,7 @@ function loadInsightsPage() {
             const farmerId = data.data.farmer.id;
             
             // Get dashboard scores for that farmer using the correct endpoint
-            return fetch(`http://localhost:3001/api/scores/dashboard/${farmerId}`)
+            return fetch(`${BASE_API_URL}/api/scores/dashboard/${farmerId}`)
                 .then(res => {
                     console.log('Scores API response status:', res.status);
                     return res.json();
@@ -622,7 +631,7 @@ function loadReportsPage() {
         if (dashboardData.success && dashboardData.data && dashboardData.data.farmer) {
             const farmerId = dashboardData.data.farmer.id;
             // Now fetch the monthly report for this farmer using the correct endpoint
-            return fetch(`http://localhost:3001/api/monthly-reports/monthly/${farmerId}`, {
+            return fetch(`${BASE_API_URL}/api/monthly-reports/monthly/${farmerId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authToken}`
@@ -636,7 +645,7 @@ function loadReportsPage() {
                 console.log('Monthly report API response data:', monthlyReportData);
                 if (monthlyReportData.success && monthlyReportData.report) {
                     // Now fetch badges for this farmer
-                    return fetch(`http://localhost:3001/api/scores/badges/${farmerId}`, {
+                    return fetch(`${BASE_API_URL}/api/scores/badges/${farmerId}`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${authToken}`
@@ -1445,7 +1454,7 @@ if (document.getElementById('loginForm')) {
         const password = document.getElementById('password').value;
         
         // Make API call to login
-        fetch('http://localhost:3001/api/auth/login', {
+        fetch(`${BASE_API_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1486,7 +1495,7 @@ if (document.getElementById('registerForm')) {
         const language = document.getElementById('language').value;
         
         // Make API call to register
-        fetch('http://localhost:3001/api/auth/register', {
+        fetch(`${BASE_API_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

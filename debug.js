@@ -1,41 +1,44 @@
-// Debug script to check if servers are working correctly
-const fetch = require('node-fetch').default;
+// Debug script for AgroGig application
+// Tests various components of the application
+
+// Define base API URL
+const BASE_API_URL = process.env.BASE_API_URL || 'http://localhost:3001';
 
 async function debugServers() {
-    console.log('=== Debugging AgroGig Servers ===\n');
+    console.log('=== AgroGig Debug Script ===');
     
-    // Test 1: Check if backend server is running
-    console.log('1. Testing backend server (port 3001)...');
+    // Test 1: Check if frontend server is running
+    console.log('\n1. Testing frontend server...');
     try {
-        const backendResponse = await fetch('http://localhost:3001');
-        console.log('   Backend server status:', backendResponse.status);
-        if (backendResponse.status === 200) {
-            console.log('   ✅ Backend server is running');
-        } else {
-            console.log('   ❌ Backend server returned status:', backendResponse.status);
-        }
-    } catch (error) {
-        console.log('   ❌ Backend server error:', error.message);
-    }
-    
-    // Test 2: Check if frontend server is running
-    console.log('\n2. Testing frontend server (port 8000)...');
-    try {
-        const frontendResponse = await fetch('http://localhost:8000');
+        const frontendResponse = await fetch('http://localhost:3001');
         console.log('   Frontend server status:', frontendResponse.status);
-        if (frontendResponse.status === 200) {
+        if (frontendResponse.ok) {
             console.log('   ✅ Frontend server is running');
         } else {
-            console.log('   ❌ Frontend server returned status:', frontendResponse.status);
+            console.log('   ❌ Frontend server returned error');
         }
     } catch (error) {
         console.log('   ❌ Frontend server error:', error.message);
     }
     
+    // Test 2: Check if backend server is running
+    console.log('\n2. Testing backend server...');
+    try {
+        const backendResponse = await fetch(BASE_API_URL);
+        console.log('   Backend server status:', backendResponse.status);
+        if (backendResponse.ok) {
+            console.log('   ✅ Backend server is running');
+        } else {
+            console.log('   ❌ Backend server returned error');
+        }
+    } catch (error) {
+        console.log('   ❌ Backend server error:', error.message);
+    }
+    
     // Test 3: Test login API through backend
     console.log('\n3. Testing login API...');
     try {
-        const loginResponse = await fetch('http://localhost:3001/api/auth/login', {
+        const loginResponse = await fetch(`${BASE_API_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -63,7 +66,7 @@ async function debugServers() {
     console.log('\n4. Testing protected route...');
     try {
         // First get a token
-        const loginResponse = await fetch('http://localhost:3001/api/auth/login', {
+        const loginResponse = await fetch(`${BASE_API_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -78,7 +81,7 @@ async function debugServers() {
         if (loginData.success) {
             const token = loginData.token;
             
-            const protectedResponse = await fetch('http://localhost:3001/api/protected/dashboard', {
+            const protectedResponse = await fetch(`${BASE_API_URL}/api/protected/dashboard`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
