@@ -200,11 +200,13 @@ function initializeDashboard() {
 }
 
 // Define base API URL - use production URL if available, otherwise localhost
-const BASE_API_URL = window.location.hostname.includes('railway.app') 
-  ? `https://${window.location.hostname}` 
-  : window.location.hostname.includes('vercel.app')
-  ? `https://${window.location.hostname}`
-  : 'http://localhost:3001';
+const BASE_API_URL = window._env_ && window._env_.BASE_API_URL 
+    ? window._env_.BASE_API_URL 
+    : window.location.hostname.includes('railway.app') 
+        ? `https://${window.location.hostname}` 
+        : window.location.hostname.includes('vercel.app')
+            ? `https://${window.location.hostname}`
+            : 'http://localhost:3001';
 
 console.log('Using API base URL:', BASE_API_URL);
 
