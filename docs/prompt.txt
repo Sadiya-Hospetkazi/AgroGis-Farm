@@ -1,0 +1,291 @@
+AgroGig – Gigifying Everyday Farming Actions Into Measurable Rewards
+
+Theme
+"Gigifying Farming – Turning everyday farm actions into measurable signals & rewards."
+
+1. Project Summary (Simple & Powerful)
+
+AgroGig is a lightweight digital layer built on top of a farmer's natural workflow.
+Farmers continue their daily activities — watering, weeding, monitoring, fertilizing —
+and AgroGig automatically captures, validates, and rewards these micro-actions as "digital gigs."
+
+The system uses simple inputs (voice/text) + light sensor data (optional)
+to translate each action into:
+
+a verified signal
+
+a score
+
+a micro-reward
+
+a monthly progress report
+
+Farmers don't need new habits — the system adapts to them.
+
+2. Ultra-Easy Tech Stack (Finishable in 4 Hours)
+Frontend (Very Simple + Beautiful)
+
+Use:
+
+HTML5 + CSS3 (Bootstrap/Tailwind for styling)
+
+Vanilla JavaScript
+
+Browser Speech-to-Text API (no ML needed)
+
+Multi-language support (English, Hindi, Kannada)
+
+Why?
+✨ Looks modern
+✨ Fast to build
+✨ Multilingual with minimal config
+✨ Easy voice input
+
+Backend (Super Easy)
+
+Use:
+
+Node.js + Express
+
+Lightweight rule-based scoring
+
+No heavy ML needed now, just placeholders
+
+Weather data via OpenWeatherMap Free API
+
+Database (Easiest to Build in Minutes)
+
+Use:
+
+MySQL (structured storage)
+
+ChromaDB (for embeddings/AI-like features)
+
+3. System Architecture (Very Simple)
+Frontend (HTML/CSS/JS)
+    |
+    | REST API calls
+    v
+Backend (Node.js + Express)
+    |
+    v
+MySQL (user, actions, scores)
+    |
+    v
+ChromaDB (embeddings, recommendations)
+    |
+    v
+Weather API (OpenWeatherMap)
+
+4. Pages to Build (Fast + Practical)
+1. Landing Page
+
+Purpose: Clear explanation + CTA buttons
+Contents:
+
+AgroGig logo + tagline
+
+"Turn everyday farm actions into measurable rewards."
+
+Buttons:
+
+Login / Register
+
+Select Language (EN / HI / KN)
+
+2. Dashboard Page
+
+Most important page
+Shows:
+
+Farmer name
+
+Today's scores
+
+Quick stats
+
+Soil Score
+
+Water Score
+
+Weed Risk
+
+Button → Log Action
+
+Alerts section:
+
+"High Weed Risk Today (78/100) — consider early weeding"
+
+3. Log Action Page
+
+Farmer logs action via:
+
+A. Dropdown list
+
+Watering
+
+Weeding
+
+Fertilizing
+
+Crop Monitoring
+
+Irrigation
+
+Seeding
+
+B. Voice Input (Browser API)
+
+Click mic → speak in any language.
+
+Example:
+"Today morning I watered the tomato plants."
+
+You send this text to backend.
+
+Backend validates:
+
+Weather (too much rain?)
+
+Crop stage
+
+Past logs
+
+And returns:
+
+Action: Watering
+Validation: ✔ Correct timing 
+Score: +12 Soil Health Points
+Recommendation: Reduce water by 10% tomorrow.
+
+4. Scores & Reports Page
+
+Shows:
+
+Monthly chart
+
+Score categories:
+
+Soil Health Score
+
+Smart Irrigation Score
+
+Sustainability Score
+
+Download PDF (optional simple HTML → Save)
+
+5. Settings Page
+
+Language selector
+
+Profile
+
+Logout
+
+5. Multilingual Setup (English, Hindi, Kannada)
+
+Use:
+
+Simple JSON translation files
+
+Create translation objects:
+
+English
+
+{
+  "log_action": "Log Action",
+  "watering": "Watering the field",
+  "weeding": "Weeding",
+  "fertilizing": "Fertilizing"
+}
+
+
+Hindi
+
+{
+  "log_action": "क्रिया दर्ज करें",
+  "watering": "सिंचाई",
+  "weeding": "निराई",
+  "fertilizing": "उर्वरक डालना"
+}
+
+
+Kannada
+
+{
+  "log_action": "ಕ್ರಿಯೆಯನ್ನು ದಾಖಲಿಸಿ",
+  "watering": "ನೀರಾವರಿ",
+  "weeding": "ಕಳೆ ತೆಗೆಯುವುದು",
+  "fertilizing": "ರಸಗೊಬ್ಬರ ಹಾಕುವುದು"
+}
+
+
+Switch language from navbar.
+
+6. Backend Logic (Simple Rule-Based AI)
+Example: Weed Risk Score
+If humidity > 70% AND temperature 20–30°C → Risk +50
+If crop spacing is small → Risk +20
+If irrigation happened in last 24h → Risk +10
+
+
+Output:
+
+{
+  "risk": 78,
+  "message": "High weed risk – early weeding advised."
+}
+
+Example: Watering Validation
+If raining today → reduce score
+If soil moisture < threshold → increase score
+If crop stage = flowering → moderate score
+
+7. Rewards Logic
+
+For every correct gig:
+
++10 or +20 points
+
+Unlock badges like:
+
+"Smart Irrigator"
+
+"Soil Protector"
+
+"Weed Warrior"
+
+In monthly report:
+
+Discounts
+
+Scheme eligibility
+
+Fertilizer coupons (dummy)
+
+8. Final Deliverables (To Show in Hackathon)
+✔ A working website with:
+
+Login
+
+Dashboard
+
+Log Action
+
+Scores
+
+Multilingual support
+
+Voice input
+
+Simple validation
+
+PDF/HTML monthly report
+
+✔ A clear explanation:
+
+"We didn't change farmers' behavior.
+We just digitized what they already do."
+
+✔ Clean UI with agricultural color theme
+✔ Simple backend producing scores and insights

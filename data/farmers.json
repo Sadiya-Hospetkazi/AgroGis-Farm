@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Rajesh Kumar",
+    "email": "rajesh@example.com",
+    "password": "$2b$10$dsYZFNqUlJ3bssa35UdU6Os92lYgrtzy6ZyPU.ByDM0fKinKvWg9S",
+    "phone": "+919876543210",
+    "language": "en",
+    "location": "Punjab, India"
+  },
+  {
+    "id": 2,
+    "name": "Priya Sharma",
+    "email": "priya@example.com",
+    "password": "$2b$10$Xx5cYfopmZz94sCaJ0pYyuwXATO8sXrxdHhtr/lx4bA06gcOwozLm",
+    "phone": "+919876543211",
+    "language": "hi",
+    "location": "Uttar Pradesh, India"
+  },
+  {
+    "id": 3,
+    "name": "sadiya",
+    "email": "sadi@gmail.com",
+    "password": "$2b$10$pwFJxGp8xRhZohKt.bxcpegl9AqcLu/i4Ep0j1f6Q0HBTu4WphIyW",
+    "phone": "9123456789",
+    "language": "en",
+    "location": "Not specified"
+  }
+]

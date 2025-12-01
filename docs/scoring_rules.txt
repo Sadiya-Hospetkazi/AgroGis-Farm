@@ -1,0 +1,183 @@
+AgroGig Scoring Rules Documentation
+
+This document outlines the rule-based scoring system used in AgroGig to evaluate farming actions.
+
+1. Watering
+
+Rules:
+- If humidity < 50% → +10 points (dry conditions reward watering)
+- If rainfall > 5mm → -5 points (already raining, less need for watering)
+- If crop stage = flowering → +4 points
+- Base score: 5 points
+
+Maximum score: 15 points
+Minimum score: 0 points
+
+Human-friendly feedback:
+"Great job! Proper watering helps maintain soil moisture. Score: +X"
+
+2. Weeding
+
+Rules:
+- If humidity > 70% → +10 points (high weed risk)
+- Otherwise → +4 points (normal weeding)
+- Base score: 5 points
+
+Maximum score: 15 points
+Minimum score: 0 points
+
+Human-friendly feedback:
+"Excellent! Removing weeds reduces competition for nutrients. Score: +X"
+
+3. Fertilizing
+
+Rules:
+- If rainfall < 5mm AND temperature > 15°C → +12 points (ideal conditions)
+- Otherwise → +6 points (acceptable conditions)
+- If correct crop stage → +2 bonus points
+- Base score: 6 points
+
+Maximum score: 20 points
+Minimum score: 0 points
+
+Human-friendly feedback:
+"Well done! Fertilizing provides essential nutrients for growth. Score: +X"
+
+4. Irrigation
+
+Rules:
+- If rainfall < 2mm → +9 points (needed irrigation)
+- Otherwise → +4 points (maintenance irrigation)
+- Base score: 7 points
+
+Maximum score: 16 points
+Minimum score: 0 points
+
+Human-friendly feedback:
+"Good work! Proper irrigation ensures adequate water supply. Score: +X"
+
+5. Monitoring
+
+Rules:
+- Flat rate: +5 points
+- Base score: 3 points
+
+Maximum score: 8 points
+Minimum score: 0 points
+
+Human-friendly feedback:
+"Thanks for monitoring your crops! Early detection prevents issues. Score: +X"
+
+6. Seeding
+
+Rules:
+- If temperature 20-35°C AND humidity 40-80% → +7 points (ideal conditions)
+- Otherwise → +3 points (acceptable conditions)
+- Base score: 4 points
+
+Maximum score: 11 points
+Minimum score: 0 points
+
+Human-friendly feedback:
+"Great start! Proper seeding is crucial for a healthy crop. Score: +X"
+
+7. Environmental Factors
+
+Weather conditions that affect scoring:
+- Temperature: Affects all outdoor activities
+- Humidity: Affects weeding and disease risk
+- Rainfall: Affects watering and fertilizing decisions
+- Wind: Affects spraying effectiveness
+
+8. Crop-Specific Modifiers
+
+Tomato:
+- Watering: +2 bonus points
+- Fertilizing: +1 bonus points
+
+Rice:
+- Irrigation: +3 bonus points
+- Fertilizing: +2 bonus points
+
+Wheat:
+- Fertilizing: +2 bonus points
+- Weeding: +1 bonus points
+
+Corn:
+- Seeding: +2 bonus points
+- Irrigation: +1 bonus points
+
+Cotton:
+- Weeding: +2 bonus points
+- Fertilizing: +1 bonus points
+
+9. Penalty Rules
+
+Actions that result in point deductions:
+- Watering during heavy rain: -5 points
+- Fertilizing before heavy rain: -3 points
+- Duplicate actions within 24 hours: -2 points
+- Late actions (logged after 24 hours): -1 point
+
+10. Badge Criteria
+
+Smart Irrigator:
+- 5+ watering actions with score > 10
+- Consistent watering schedule
+
+Soil Protector:
+- 5+ fertilizing actions with score > 8
+- Maintains soil health score > 80
+
+Weed Warrior:
+- 5+ weeding actions with score > 8
+- Keeps weed risk < 30%
+
+Water Manager:
+- 5+ irrigation actions with score > 7
+- Efficient water usage
+
+Planting Pro:
+- 5+ seeding actions with score > 6
+- High success rate
+
+Fertilizer Expert:
+- 5+ fertilizing actions with score > 10
+- Optimal timing and application
+
+11. Monthly Scoring Categories
+
+Soil Health Score:
+- Based on fertilizing, weeding, and monitoring actions
+- Weight: 30%
+
+Water Management Score:
+- Based on watering and irrigation actions
+- Weight: 30%
+
+Sustainability Score:
+- Based on all actions with environmental considerations
+- Weight: 20%
+
+Consistency Score:
+- Based on regular action logging
+- Weight: 20%
+
+Total Score Calculation:
+(Total Points / Max Possible Points) * 100
+
+12. Recommendation Engine
+
+AI-like recommendations based on:
+- Past action history
+- Weather patterns
+- Crop growth stages
+- Seasonal factors
+
+Examples:
+- "Water early in the morning or late in the evening to minimize evaporation."
+- "Regular weeding prevents pest infestations and disease spread."
+- "Apply fertilizer during cooler parts of the day for best absorption."
+- "Schedule irrigation based on soil moisture levels to avoid overwatering."
+- "Check for pests and diseases regularly, especially during flowering."
+- "Ensure proper spacing between seeds for healthy plant development."

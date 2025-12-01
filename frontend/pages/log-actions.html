@@ -1,0 +1,99 @@
+<div id="log-actions-page" class="container-fluid p-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0 text-primary-green">Log Actions</h2>
+            <p class="text-muted">Quickly log your farming activities</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary-green text-white">
+                    <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Select Action</h5>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <button class="btn btn-outline-primary-green w-100 py-3" 
+                                data-action-type="watering">
+                                <i class="fas fa-tint fa-2x mb-2"></i><br>Watering
+                            </button>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <button class="btn btn-outline-primary-green w-100 py-3" 
+                                data-action-type="weeding">
+                                <i class="fas fa-leaf fa-2x mb-2"></i><br>Weeding
+                            </button>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <button class="btn btn-outline-primary-green w-100 py-3" 
+                                data-action-type="fertilizing">
+                                <i class="fas fa-seedling fa-2x mb-2"></i><br>Fertilizing
+                            </button>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <button class="btn btn-outline-primary-green w-100 py-3" 
+                                data-action-type="irrigation">
+                                <i class="fas fa-shower fa-2x mb-2"></i><br>Irrigation
+                            </button>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <button class="btn btn-outline-primary-green w-100 py-3" 
+                                data-action-type="monitoring">
+                                <i class="fas fa-eye fa-2x mb-2"></i><br>Crop Monitoring
+                            </button>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <button class="btn btn-outline-primary-green w-100 py-3" 
+                                data-action-type="soil">
+                                <i class="fas fa-mountain fa-2x mb-2"></i><br>Soil Check
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h5 class="mb-3"><i class="fas fa-microphone me-2"></i>Voice Input</h5>
+                        <div class="text-center p-4 border rounded">
+                            <button class="btn btn-primary-green btn-lg" id="startVoiceInput">
+                                <i class="fas fa-microphone-alt me-2"></i>Start Speaking
+                            </button>
+                            <p class="text-muted mt-3">
+                                Say something like: "I watered my crops"
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-sun-yellow text-dark">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Instructions</h5>
+                </div>
+                <div class="card-body">
+                    <ol>
+                        <li>Select an action</li>
+                        <li>Submit your activity</li>
+                        <li>Earn points automatically</li>
+                    </ol>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        Voice input supports all languages!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

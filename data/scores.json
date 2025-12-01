@@ -1,0 +1,48 @@
+[
+  {
+    "id": 2001,
+    "farmerId": 1,
+    "totalPoints": 5,
+    "actionsCount": 1,
+    "lastUpdated": "2025-11-29T04:56:49.551Z"
+  },
+  {
+    "id": 1764392282635,
+    "farmerId": 1,
+    "totalPoints": 5,
+    "actionsCount": 1,
+    "lastUpdated": "2025-11-29T04:58:02.630Z"
+  },
+  {
+    "id": 1764392404127,
+    "farmerId": 1,
+    "totalPoints": 47,
+    "actionsCount": 8,
+    "categoryScores": {
+      "monitoring": 4,
+      "watering": 10,
+      "testing": 5,
+      "debug_test": 5,
+      "final_test": 5
+    },
+    "lastUpdated": "2025-11-29T05:46:06.933Z"
+  },
+  {
+    "id": 1764394332089,
+    "farmerId": 3,
+    "totalPoints": 250,
+    "actionsCount": 48,
+    "categoryScores": {
+      "watering": 50,
+      "weeding": 20,
+      "fertilizing": 20,
+      "irrigation": 80,
+      "crop monitoring": 10,
+      "soil check": 20,
+      "sustainability": 8,
+      "weed": 16,
+      "soil": 26
+    },
+    "lastUpdated": "2025-11-30T14:16:56.378Z"
+  }
+]

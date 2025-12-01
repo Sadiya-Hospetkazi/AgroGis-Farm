@@ -1,0 +1,465 @@
+[
+  {
+    "id": 1001,
+    "farmerId": 1,
+    "actionType": "watering",
+    "description": "Test watering action",
+    "timestamp": "2025-11-29T04:56:49.476Z"
+  },
+  {
+    "id": 1764392282573,
+    "farmerId": 1,
+    "actionType": "watering",
+    "description": "Test watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T04:58:02.573Z"
+  },
+  {
+    "id": 1764392404121,
+    "farmerId": 1,
+    "actionType": "weeding",
+    "description": "Test weeding action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:00:04.121Z"
+  },
+  {
+    "id": 1764392574646,
+    "farmerId": 1,
+    "actionType": "fertilizing",
+    "description": "Test fertilizing action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:02:54.646Z"
+  },
+  {
+    "id": 1764392696098,
+    "farmerId": 1,
+    "actionType": "monitoring",
+    "description": "Test monitoring action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:04:56.098Z"
+  },
+  {
+    "id": 1764392903935,
+    "farmerId": 1,
+    "actionType": "watering",
+    "description": "Test watering action with weather",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:08:23.935Z"
+  },
+  {
+    "id": 1764393425370,
+    "farmerId": 1,
+    "actionType": "testing",
+    "description": "Test action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:17:05.370Z"
+  },
+  {
+    "id": 1764393742275,
+    "farmerId": 1,
+    "actionType": "debug_test",
+    "description": "Debug test action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:22:22.275Z"
+  },
+  {
+    "id": 1764394034482,
+    "farmerId": 1,
+    "actionType": "final_test",
+    "description": "Final test action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:27:14.482Z"
+  },
+  {
+    "id": 1764394332079,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:32:12.079Z"
+  },
+  {
+    "id": 1764394337914,
+    "farmerId": 3,
+    "actionType": "Weeding",
+    "description": "Logged Weeding action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:32:17.914Z"
+  },
+  {
+    "id": 1764394339946,
+    "farmerId": 3,
+    "actionType": "Fertilizing",
+    "description": "Logged Fertilizing action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:32:19.946Z"
+  },
+  {
+    "id": 1764394347633,
+    "farmerId": 3,
+    "actionType": "Irrigation",
+    "description": "Logged Irrigation action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:32:27.633Z"
+  },
+  {
+    "id": 1764394350584,
+    "farmerId": 3,
+    "actionType": "Crop Monitoring",
+    "description": "Logged Crop Monitoring action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:32:30.584Z"
+  },
+  {
+    "id": 1764394353390,
+    "farmerId": 3,
+    "actionType": "Soil Check",
+    "description": "Logged Soil Check action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:32:33.390Z"
+  },
+  {
+    "id": 1764394355933,
+    "farmerId": 3,
+    "actionType": "Weeding",
+    "description": "Logged Weeding action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:32:35.933Z"
+  },
+  {
+    "id": 1764394361348,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:32:41.348Z"
+  },
+  {
+    "id": 1764394363773,
+    "farmerId": 3,
+    "actionType": "Soil Check",
+    "description": "Logged Soil Check action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:32:43.773Z"
+  },
+  {
+    "id": 1764394458123,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:34:18.123Z"
+  },
+  {
+    "id": 1764395166868,
+    "farmerId": 1,
+    "actionType": "watering",
+    "description": "Test watering for insights",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:46:06.868Z"
+  },
+  {
+    "id": 1764395226758,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:47:06.758Z"
+  },
+  {
+    "id": 1764395231908,
+    "farmerId": 3,
+    "actionType": "Fertilizing",
+    "description": "Logged Fertilizing action",
+    "cropType": "",
+    "timestamp": "2025-11-29T05:47:11.908Z"
+  },
+  {
+    "id": 1764398076838,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T06:34:36.838Z"
+  },
+  {
+    "id": 1764399759508,
+    "farmerId": 3,
+    "actionType": "Irrigation",
+    "description": "Logged Irrigation action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:02:39.508Z"
+  },
+  {
+    "id": 1764401150617,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:25:50.617Z"
+  },
+  {
+    "id": 1764401159695,
+    "farmerId": 3,
+    "actionType": "Fertilizing",
+    "description": "Logged Fertilizing action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:25:59.695Z"
+  },
+  {
+    "id": 1764401173725,
+    "farmerId": 3,
+    "actionType": "Soil Check",
+    "description": "Logged Soil Check action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:26:13.725Z"
+  },
+  {
+    "id": 1764401177109,
+    "farmerId": 3,
+    "actionType": "Irrigation",
+    "description": "Logged Irrigation action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:26:17.109Z"
+  },
+  {
+    "id": 1764401180208,
+    "farmerId": 3,
+    "actionType": "Crop Monitoring",
+    "description": "Logged Crop Monitoring action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:26:20.208Z"
+  },
+  {
+    "id": 1764401182671,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:26:22.671Z"
+  },
+  {
+    "id": 1764401185882,
+    "farmerId": 3,
+    "actionType": "Weeding",
+    "description": "Logged Weeding action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:26:25.882Z"
+  },
+  {
+    "id": 1764401226753,
+    "farmerId": 3,
+    "actionType": "Irrigation",
+    "description": "Logged Irrigation action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:27:06.753Z"
+  },
+  {
+    "id": 1764401571129,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:32:51.129Z"
+  },
+  {
+    "id": 1764401578339,
+    "farmerId": 3,
+    "actionType": "Weeding",
+    "description": "Logged Weeding action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:32:58.339Z"
+  },
+  {
+    "id": 1764402097641,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:41:37.641Z"
+  },
+  {
+    "id": 1764402771137,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:52:51.137Z"
+  },
+  {
+    "id": 1764402777380,
+    "farmerId": 3,
+    "actionType": "Fertilizing",
+    "description": "Logged Fertilizing action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:52:57.380Z"
+  },
+  {
+    "id": 1764402785051,
+    "farmerId": 3,
+    "actionType": "Soil Check",
+    "description": "Logged Soil Check action",
+    "cropType": "",
+    "timestamp": "2025-11-29T07:53:05.051Z"
+  },
+  {
+    "id": 1764413428541,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T10:50:28.541Z"
+  },
+  {
+    "id": 1764413570494,
+    "farmerId": 3,
+    "actionType": "Watering",
+    "description": "Logged Watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T10:52:50.494Z"
+  },
+  {
+    "id": 1764413590574,
+    "farmerId": 3,
+    "actionType": "watering",
+    "description": "Logged watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T10:53:10.574Z"
+  },
+  {
+    "id": 1764413596479,
+    "farmerId": 3,
+    "actionType": "soil",
+    "description": "Logged soil action",
+    "cropType": "",
+    "timestamp": "2025-11-29T10:53:16.479Z"
+  },
+  {
+    "id": 1764413603779,
+    "farmerId": 3,
+    "actionType": "watering",
+    "description": "Logged watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T10:53:23.779Z"
+  },
+  {
+    "id": 1764413612770,
+    "farmerId": 3,
+    "actionType": "monitoring",
+    "description": "Logged monitoring action",
+    "cropType": "",
+    "timestamp": "2025-11-29T10:53:32.770Z"
+  },
+  {
+    "id": 1764413824877,
+    "farmerId": 3,
+    "actionType": "watering",
+    "description": "Logged watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T10:57:04.877Z"
+  },
+  {
+    "id": 1764414286270,
+    "farmerId": 3,
+    "actionType": "watering",
+    "description": "Logged watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T11:04:46.270Z"
+  },
+  {
+    "id": 1764414288303,
+    "farmerId": 3,
+    "actionType": "weeding",
+    "description": "Logged weeding action",
+    "cropType": "",
+    "timestamp": "2025-11-29T11:04:48.303Z"
+  },
+  {
+    "id": 1764414290237,
+    "farmerId": 3,
+    "actionType": "fertilizing",
+    "description": "Logged fertilizing action",
+    "cropType": "",
+    "timestamp": "2025-11-29T11:04:50.237Z"
+  },
+  {
+    "id": 1764414292882,
+    "farmerId": 3,
+    "actionType": "irrigation",
+    "description": "Logged irrigation action",
+    "cropType": "",
+    "timestamp": "2025-11-29T11:04:52.882Z"
+  },
+  {
+    "id": 1764417516047,
+    "farmerId": 3,
+    "actionType": "watering",
+    "description": "Logged watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T11:58:36.047Z"
+  },
+  {
+    "id": 1764420672436,
+    "farmerId": 3,
+    "actionType": "watering",
+    "description": "Logged watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T12:51:12.436Z"
+  },
+  {
+    "id": 1764420785328,
+    "farmerId": 3,
+    "actionType": "watering",
+    "description": "Logged watering action",
+    "cropType": "",
+    "timestamp": "2025-11-29T12:53:05.328Z"
+  },
+  {
+    "id": 1764420788220,
+    "farmerId": 3,
+    "actionType": "weeding",
+    "description": "Logged weeding action",
+    "cropType": "",
+    "timestamp": "2025-11-29T12:53:08.220Z"
+  },
+  {
+    "id": 1764420790244,
+    "farmerId": 3,
+    "actionType": "fertilizing",
+    "description": "Logged fertilizing action",
+    "cropType": "",
+    "timestamp": "2025-11-29T12:53:10.244Z"
+  },
+  {
+    "id": 1764420796271,
+    "farmerId": 3,
+    "actionType": "irrigation",
+    "description": "Logged irrigation action",
+    "cropType": "",
+    "timestamp": "2025-11-29T12:53:16.271Z"
+  },
+  {
+    "id": 1764420798537,
+    "farmerId": 3,
+    "actionType": "soil",
+    "description": "Logged soil action",
+    "cropType": "",
+    "timestamp": "2025-11-29T12:53:18.537Z"
+  },
+  {
+    "id": 1764512213538,
+    "farmerId": 3,
+    "actionType": "watering",
+    "description": "Logged watering action",
+    "cropType": "",
+    "timestamp": "2025-11-30T14:16:53.539Z"
+  },
+  {
+    "id": 1764512216365,
+    "farmerId": 3,
+    "actionType": "monitoring",
+    "description": "Logged monitoring action",
+    "cropType": "",
+    "timestamp": "2025-11-30T14:16:56.365Z"
+  }
+]

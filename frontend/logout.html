@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout - AgroGig</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="./styles/professional.css" rel="stylesheet">
+</head>
+<body class="bg-light-green">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="bg-primary-green col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="sidebar-header text-center py-3 border-bottom">
+                    <h3 class="text-white mb-0"><i class="fas fa-seedling me-2"></i>AgroGig</h3>
+                </div>
+
+                <ul class="list-unstyled components">
+                    <li>
+                        <a href="dashboard-professional.html" class="nav-link text-white" data-page="dashboard">
+                            <i class="fas fa-chart-bar me-3"></i><span class="nav-link-text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="log-actions.html" class="nav-link text-white" data-page="log-actions">
+                            <i class="fas fa-edit me-3"></i><span class="nav-link-text">Log Actions</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="insights.html" class="nav-link text-white" data-page="insights">
+                            <i class="fas fa-seedling me-3"></i><span class="nav-link-text">Insights & Scores</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="reports.html" class="nav-link text-white" data-page="reports">
+                            <i class="fas fa-file-alt me-3"></i><span class="nav-link-text">My Reports</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="chatbot.html" class="nav-link text-white" data-page="voice-assistant">
+                            <i class="fas fa-robot me-3"></i><span class="nav-link-text">Voice Assistant</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="language.html" class="nav-link text-white" data-page="language">
+                            <i class="fas fa-globe me-3"></i><span class="nav-link-text">Language Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="profile.html" class="nav-link text-white" data-page="profile">
+                            <i class="fas fa-user me-3"></i><span class="nav-link-text">Profile</span>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="logout.html" class="nav-link text-white active-page" data-page="logout">
+                            <i class="fas fa-sign-out-alt me-3"></i><span class="nav-link-text">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Page Content -->
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <!-- Top Navbar -->
+                <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+                    <div class="container-fluid">
+                        <button type="button" id="sidebarCollapse" class="btn btn-primary-green">
+                            <i class="fas fa-align-left"></i>
+                        </button>
+                        <div class="ms-auto">
+                            <select id="languageSelector" class="form-select form-select-sm">
+                                <option value="en">English</option>
+                                <option value="hi">हिन्दी</option>
+                                <option value="kn">ಕನ್ನಡ</option>
+                            </select>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Logout Content -->
+                <div class="container-fluid p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2 class="mb-0 text-primary-green">Logout</h2>
+                            <p class="text-muted">Securely exit your account</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-primary-green text-white">
+                                    <h5 class="mb-0"><i class="fas fa-sign-out-alt me-2"></i>Confirm Logout</h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <i class="fas fa-question-circle fa-3x text-primary-green mb-3"></i>
+                                    <h4>Are you sure you want to logout?</h4>
+                                    <p class="text-muted">You will need to login again to access your dashboard.</p>
+                                    
+                                    <div class="mt-4">
+                                        <button class="btn btn-primary-green me-2" id="confirmLogout">
+                                            <i class="fas fa-check me-2"></i>Yes, Logout
+                                        </button>
+                                        <button class="btn btn-outline-secondary" id="cancelLogout">
+                                            <i class="fas fa-times me-2"></i>Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Check if we're already on the logout page
+        if (window.location.pathname.includes('logout.html')) {
+            // Already on logout page, don't redirect
+        }
+        
+        // Sidebar toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarCollapse = document.getElementById('sidebarCollapse');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (sidebarCollapse) {
+                sidebarCollapse.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+            
+            // Add event listeners for logout buttons
+            const confirmLogout = document.getElementById('confirmLogout');
+            const cancelLogout = document.getElementById('cancelLogout');
+            
+            if (confirmLogout) {
+                confirmLogout.addEventListener('click', function() {
+                    // Clear all session data
+                    localStorage.removeItem('agrogig_token');
+                    sessionStorage.clear();
+                    // Redirect to login
+                    window.location.href = '/login.html';
+                });
+            }
+            
+            if (cancelLogout) {
+                cancelLogout.addEventListener('click', function() {
+                    // Go back to dashboard
+                    window.location.href = '/dashboard-professional.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>
