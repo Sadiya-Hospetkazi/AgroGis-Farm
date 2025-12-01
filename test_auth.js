@@ -1,5 +1,5 @@
 // Test authentication functionality
-const fetch = require('node-fetch').default;
+// fetch is built-in in Node 18+, so no need to require it
 
 async function testLogin() {
     try {

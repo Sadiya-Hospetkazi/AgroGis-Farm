@@ -1,7 +1,7 @@
 // Weather service for AgroGig
 // This service integrates with a real weather API
 const { config } = require('../config/env');
-const fetch = require('node-fetch');
+// fetch is built-in in Node 18+, so no need to require it
 
 // Mock weather data for demonstration when API key is not available
 const mockWeatherData = {
@@ -14,7 +14,7 @@ const mockWeatherData = {
 };
 
 // Get current weather for a location
-const getCurrentWeather = async (location) => {
+const getCurrentWeather = async (location) {
     try {
         // Check if API key is available
         if (!config.OPENWEATHER_API_KEY) {
@@ -48,7 +48,7 @@ const getCurrentWeather = async (location) => {
 };
 
 // Get weather forecast
-const getWeatherForecast = async (location, days = 5) => {
+const getWeatherForecast = async (location, days = 5) {
     try {
         // In a real implementation, this would call a weather forecast API
         // For this demo, we'll return mock forecast data
@@ -73,7 +73,7 @@ const getWeatherForecast = async (location, days = 5) => {
 };
 
 // Check if weather conditions are suitable for an action
-const isWeatherSuitable = (actionType, weatherData) => {
+const isWeatherSuitable = (actionType, weatherData) {
     try {
         // Simple rules for weather suitability
         switch (actionType) {
