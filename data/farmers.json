@@ -88,5 +88,14 @@
     "phone": "1234567890",
     "language": "en",
     "location": "Test Location"
+  },
+  {
+    "id": 11,
+    "name": "Debug User",
+    "email": "debug@example.com",
+    "password": "$2b$10$XlurzDFpqThRjYyW.Smp0uBv9vshwu0MCLC8cw3A.pj7seX1yzeJK",
+    "phone": "1234567890",
+    "language": "en",
+    "location": "Debug Location"
   }
 ]
