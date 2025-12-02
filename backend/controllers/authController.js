@@ -89,7 +89,7 @@ const login = (req, res) => {
 // Register controller
 const register = (req, res) => {
     try {
-        const { name, email, password, phone, language } = req.body;
+        const { name, email, password, phone, location, language } = req.body;
         
         // Check if farmer already exists
         const existingFarmer = dataStorage.getFarmerByEmail(email);
@@ -116,7 +116,7 @@ const register = (req, res) => {
             password: hashedPassword,
             phone,
             language: language || 'en',
-            location: 'Not specified'
+            location: location || 'Not specified'
         };
         
         // Save farmer to data storage

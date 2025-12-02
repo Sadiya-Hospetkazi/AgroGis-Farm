@@ -29,7 +29,12 @@ function handleRegister(e) {
         },
         body: JSON.stringify({ name, email, password, phone, location, language })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             // Show success message
@@ -38,12 +43,12 @@ function handleRegister(e) {
             // Redirect to login page
             window.location.href = 'login.html';
         } else {
-            alert('Registration failed: ' + data.message);
+            alert('Registration failed: ' + (data.message || 'Unknown error occurred. Please try again.'));
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Registration failed. Please try again.');
+        alert('Registration failed: ' + (error.message || 'Unknown error occurred. Please try again.'));
     });
 }
 

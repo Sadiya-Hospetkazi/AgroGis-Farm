@@ -25,5 +25,59 @@
     "phone": "9123456789",
     "language": "en",
     "location": "Not specified"
+  },
+  {
+    "id": 4,
+    "name": "Test User",
+    "email": "test@example.com",
+    "password": "$2b$10$yvQOkkJVheUnBSNA3pkCuuwOLYpHV2iMABqaXC9qS4w2pL8ylR8kS",
+    "phone": "1234567890",
+    "language": "en",
+    "location": "Not specified"
+  },
+  {
+    "id": 5,
+    "name": "Test User 2",
+    "email": "test2@example.com",
+    "password": "$2b$10$grUT73bAI9t0.yNLAe2mTeAJqCiIUzZFGfVgw2798OVcT/db7e6OS",
+    "phone": "1234567890",
+    "language": "en",
+    "location": "Not specified"
+  },
+  {
+    "id": 6,
+    "name": "Test User 3",
+    "email": "test3@example.com",
+    "password": "$2b$10$d0nhkG2lVz40ZFTsWdE8fO5QRHSivCwyWxrEQFI1l8YOafyokZxU2",
+    "phone": "1234567890",
+    "language": "en",
+    "location": "Not specified"
+  },
+  {
+    "id": 7,
+    "name": "Test User 4",
+    "email": "test4@example.com",
+    "password": "$2b$10$/oKxLHiAGrFLPK4/FhtCJu3Z3p5EQSJG3/3M6IWLkUk.AB5yKmkoi",
+    "phone": "1234567890",
+    "language": "en",
+    "location": "Test Location"
+  },
+  {
+    "id": 8,
+    "name": "Test User 5",
+    "email": "test5@example.com",
+    "password": "$2b$10$1oIIHybEMuxtRl1ty5BC9erMAiz57aiES4L1uhRrd8J8MWMN4iirO",
+    "phone": "1234567890",
+    "language": "en",
+    "location": "Test Location"
+  },
+  {
+    "id": 9,
+    "name": "sadiya",
+    "email": "sadiya@gmail.com",
+    "password": "$2b$10$LpQcIoZMBtw.tbHcKS6ZoeuZRCrZ8B6M40skpAmTwNPdI5sXAaiOi",
+    "phone": "9876543210",
+    "language": "en",
+    "location": "india"
   }
 ]

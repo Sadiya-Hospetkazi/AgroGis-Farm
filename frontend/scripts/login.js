@@ -25,7 +25,12 @@ function handleLogin(e) {
         },
         body: JSON.stringify({ email, password })
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             // Store token in localStorage
@@ -34,12 +39,12 @@ function handleLogin(e) {
             // Redirect to dashboard
             window.location.href = 'dashboard-professional.html';
         } else {
-            alert('Login failed: ' + data.message);
+            alert('Login failed: ' + (data.message || 'Unknown error occurred. Please try again.'));
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Login failed. Please try again.');
+        alert('Login failed: ' + (error.message || 'Unknown error occurred. Please try again.'));
     });
 }
 

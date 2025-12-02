@@ -44,5 +44,16 @@
       "soil": 26
     },
     "lastUpdated": "2025-11-30T14:16:56.378Z"
+  },
+  {
+    "id": 1764653794741,
+    "farmerId": 9,
+    "totalPoints": 21,
+    "actionsCount": 3,
+    "categoryScores": {
+      "irrigation": 5,
+      "soil": 16
+    },
+    "lastUpdated": "2025-12-02T05:36:43.830Z"
   }
 ]
