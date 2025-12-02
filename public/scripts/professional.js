@@ -405,7 +405,7 @@ function loadInsightsPage() {
             const farmerId = data.data.farmer.id;
             
             // Get dashboard scores for that farmer using the correct endpoint
-            return fetch(`${API_BASE}/api/scores/dashboard/${farmerId}`)
+            return fetch(`${API_BASE}/api/scores/dashboard/${farmerId})
                 .then(res => {
                     console.log('Scores API response status:', res.status);
                     return res.json();

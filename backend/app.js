@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from frontend directory
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Routes
 const authRoutes = require('./routes/auth');
@@ -42,48 +42,48 @@ app.use('/api/chatbot', chatbotRoutes);
 
 // Serve frontend pages
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+    res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 app.get('/dashboard-professional', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dashboard-professional.html'));
+    res.sendFile(path.join(__dirname, '../public/dashboard-professional.html'));
 });
 
 app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/login.html'));
+    res.sendFile(path.join(__dirname, '../public/login.html'));
 });
 
 app.get('/register', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/register.html'));
+    res.sendFile(path.join(__dirname, '../public/register.html'));
 });
 
 app.get('/chatbot', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/chatbot.html'));
+    res.sendFile(path.join(__dirname, '../public/chatbot.html'));
 });
 
 // Dynamic routes for the professional dashboard pages
 app.get('/log-actions', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/pages/log-actions.html'));
+    res.sendFile(path.join(__dirname, '../public/pages/log-actions.html'));
 });
 
 app.get('/insights', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/pages/insights.html'));
+    res.sendFile(path.join(__dirname, '../public/pages/insights.html'));
 });
 
 app.get('/reports', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/pages/reports.html'));
+    res.sendFile(path.join(__dirname, '../public/pages/reports.html'));
 });
 
 app.get('/language', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/pages/language.html'));
+    res.sendFile(path.join(__dirname, '../public/pages/language.html'));
 });
 
 app.get('/profile', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/pages/profile.html'));
+    res.sendFile(path.join(__dirname, '../public/pages/profile.html'));
 });
 
 app.get('/logout', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/pages/logout.html'));
+    res.sendFile(path.join(__dirname, '../public/pages/logout.html'));
 });
 
 // Error handling middleware
