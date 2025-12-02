@@ -7,6 +7,8 @@ const BASE_API_URL = window._env_ && window._env_.BASE_API_URL
             ? `https://${window.location.hostname}`
             : 'http://localhost:3001';
 
+console.log("FINAL API URL:", BASE_API_URL);
+
 // Use relative URL if BASE_API_URL is empty (same domain deployment)
 const API_BASE = BASE_API_URL ? BASE_API_URL : '';
 
