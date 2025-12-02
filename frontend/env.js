@@ -1,3 +1,3 @@
 window._env_ = {
-  BASE_API_URL: "http://localhost:3001"
+  BASE_API_URL: "https://agrogis-farm-production.up.railway.app"
 };
