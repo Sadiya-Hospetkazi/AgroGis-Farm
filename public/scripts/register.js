@@ -33,25 +33,37 @@ function handleRegister(e) {
         body: JSON.stringify({ name, email, password, phone, location, language })
     })
     .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        // Always try to parse JSON, even for error responses
+        return response.text().then(text => {
+            console.log('Raw response text:', text);
+            try {
+                return { status: response.status, data: JSON.parse(text) };
+            } catch (e) {
+                console.error('Failed to parse JSON:', e);
+                return { status: response.status, data: { success: false, message: text || 'Unknown error occurred' } };
+            }
+        });
     })
-    .then(data => {
-        if (data.success) {
+    .then(({ status, data }) => {
+        console.log('Parsed response:', { status, data });
+        
+        if (status >= 200 && status < 300 && data.success) {
             // Show success message
             alert('Registration successful! Please login with your credentials.');
             
             // Redirect to login page
             window.location.href = 'login.html';
         } else {
-            alert('Registration failed: ' + (data.message || 'Unknown error occurred. Please try again.'));
+            const errorMessage = data.message || data.error || 'Registration failed. Please try again.';
+            alert('Registration failed: ' + errorMessage);
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Registration failed: ' + (error.message || 'Unknown error occurred. Please try again.'));
+        console.error('Network error:', error);
+        alert('Registration failed: Network error or server unavailable. Please try again.');
     });
 }
 

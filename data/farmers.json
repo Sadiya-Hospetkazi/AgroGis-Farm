@@ -79,5 +79,14 @@
     "phone": "9876543210",
     "language": "en",
     "location": "india"
+  },
+  {
+    "id": 10,
+    "name": "New Test User",
+    "email": "newtest@example.com",
+    "password": "$2b$10$lGHFd6zeIk5H2aEahoSdLu0UPRvsCrzzAacZ2Og.IYmoWvPZNAEjW",
+    "phone": "1234567890",
+    "language": "en",
+    "location": "Test Location"
   }
 ]

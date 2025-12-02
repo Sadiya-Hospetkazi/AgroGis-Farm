@@ -29,25 +29,37 @@ function handleLogin(e) {
         body: JSON.stringify({ email, password })
     })
     .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
+        // Always try to parse JSON, even for error responses
+        return response.text().then(text => {
+            console.log('Raw response text:', text);
+            try {
+                return { status: response.status, data: JSON.parse(text) };
+            } catch (e) {
+                console.error('Failed to parse JSON:', e);
+                return { status: response.status, data: { success: false, message: text || 'Unknown error occurred' } };
+            }
+        });
     })
-    .then(data => {
-        if (data.success) {
+    .then(({ status, data }) => {
+        console.log('Parsed response:', { status, data });
+        
+        if (status >= 200 && status < 300 && data.success) {
             // Store token in localStorage
             localStorage.setItem('agrogig_token', data.token);
             
             // Redirect to dashboard
             window.location.href = 'dashboard-professional.html';
         } else {
-            alert('Login failed: ' + (data.message || 'Unknown error occurred. Please try again.'));
+            const errorMessage = data.message || data.error || 'Login failed. Please try again.';
+            alert('Login failed: ' + errorMessage);
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Login failed: ' + (error.message || 'Unknown error occurred. Please try again.'));
+        console.error('Network error:', error);
+        alert('Login failed: Network error or server unavailable. Please try again.');
     });
 }
 
