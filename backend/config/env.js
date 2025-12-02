@@ -8,7 +8,7 @@ require('dotenv').config();
 const envConfig = {
     // Server configuration
     NODE_ENV: process.env.NODE_ENV || 'development',
-    PORT: process.env.PORT || 3000,
+    PORT: process.env.PORT || 3001,
     
     // Database configuration
     DB_HOST: process.env.DB_HOST || 'localhost',
