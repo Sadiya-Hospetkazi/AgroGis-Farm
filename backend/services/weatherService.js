@@ -1,7 +1,7 @@
 // Weather service for AgroGig
 // This service integrates with a real weather API
 const { config } = require('../config/env');
-const fetch = require('node-fetch');
+// Using built-in fetch for Node 18+
 
 // Mock weather data for demonstration when API key is not available
 const mockWeatherData = {

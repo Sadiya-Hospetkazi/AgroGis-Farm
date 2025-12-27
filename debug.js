@@ -1,4 +1,6 @@
 // Debug script to check if servers are working correctly
+// Commented out for production use
+/*
 const fetch = require('node-fetch').default;
 
 async function debugServers() {
@@ -105,3 +107,4 @@ async function debugServers() {
 }
 
 debugServers();
+*/

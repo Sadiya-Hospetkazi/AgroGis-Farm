@@ -97,5 +97,14 @@
     "phone": "1234567890",
     "language": "en",
     "location": "Debug Location"
+  },
+  {
+    "id": 12,
+    "name": "sa",
+    "email": "sa@gmail.com",
+    "password": "$2b$10$vDbwvjpu3zGq.EZ5ZcPDXe.rxhq1QnkkoquRbFq2NHBRkA3yM.nhO",
+    "phone": "9876543210",
+    "language": "en",
+    "location": "india"
   }
 ]
