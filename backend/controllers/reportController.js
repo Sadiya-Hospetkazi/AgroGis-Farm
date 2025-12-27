@@ -10,21 +10,22 @@ const getMonthlyReport = async (req, res) => {
         const currentDate = new Date();
         const currentMonth = currentDate.toISOString().substring(0, 7); // YYYY-MM
         
-        const [farmerActions] = await pool.query(
-            'SELECT * FROM actions WHERE farmer_id = ? AND DATE_FORMAT(date, "%Y-%m") = ?',
-            [farmerId, currentMonth]
+        const farmerActionsResult = await pool.query(
+            'SELECT * FROM actions WHERE farmer_id = $1 AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE) AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)',
+            [farmerId]
         );
+        const farmerActions = farmerActionsResult.rows;
         
         // Calculate statistics
         const totalActions = farmerActions.length;
         
         // Get total score for this farmer
-        const [farmerScores] = await pool.query(
-            'SELECT SUM(score) as total_score FROM scores WHERE farmer_id = ?',
+        const farmerScoresResult = await pool.query(
+            'SELECT SUM(score) as total_score FROM scores WHERE farmer_id = $1',
             [farmerId]
         );
         
-        const totalScore = farmerScores[0].total_score || 0;
+        const totalScore = farmerScoresResult.rows[0].total_score || 0;
         
         const avgDailyScore = totalActions > 0 ? (totalScore / 30).toFixed(1) : 0; // Assuming 30 days in month
         
@@ -77,7 +78,8 @@ const getActionDistribution = async (req, res) => {
         const { farmerId } = req.params;
         
         // Get real actions for this farmer
-        const [farmerActions] = await pool.query('SELECT * FROM actions WHERE farmer_id = ?', [farmerId]);
+        const farmerActionsResult = await pool.query('SELECT * FROM actions WHERE farmer_id = $1', [farmerId]);
+        const farmerActions = farmerActionsResult.rows;
         
         // Calculate distribution
         const distribution = {};
@@ -109,7 +111,8 @@ const getRecommendations = async (req, res) => {
         // For this demo, we'll return generic recommendations based on farmer's actions
         
         const { farmerId } = req.params;
-        const [farmerActions] = await pool.query('SELECT * FROM actions WHERE farmer_id = ?', [farmerId]);
+        const farmerActionsResult = await pool.query('SELECT * FROM actions WHERE farmer_id = $1', [farmerId]);
+        const farmerActions = farmerActionsResult.rows;
         
         // Generate recommendations based on actions
         const recommendations = [];

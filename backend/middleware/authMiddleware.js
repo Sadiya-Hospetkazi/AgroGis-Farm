@@ -19,8 +19,8 @@ const authenticateToken = async (req, res, next) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'agrogig_secret_key');
         
         // Add the farmer data to the request object
-        const [result] = await pool.query('SELECT * FROM farmers WHERE id = ?', [decoded.farmerId]);
-        if (result.length === 0) {
+        const result = await pool.query('SELECT * FROM farmers WHERE id = $1', [decoded.farmerId]);
+        if (result.rows.length === 0) {
             return res.status(404).json({
                 error: 'Farmer not found',
                 message: 'Associated farmer data not found'
@@ -28,7 +28,7 @@ const authenticateToken = async (req, res, next) => {
         }
         
         // Attach farmer data to request object
-        req.farmer = result[0];
+        req.farmer = result.rows[0];
         req.farmerId = decoded.farmerId;
         next();
     } catch (err) {

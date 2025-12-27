@@ -5,8 +5,8 @@
 CREATE DATABASE IF NOT EXISTS agrogig;
 USE agrogig;
 
--- Farmers table
-CREATE TABLE IF NOT EXISTS farmers (
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS actions (
     status ENUM('pending', 'verified', 'rejected') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (farmer_id) REFERENCES farmers(id) ON DELETE CASCADE,
+    FOREIGN KEY (farmer_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_farmer_date (farmer_id, date),
     INDEX idx_type (type),
     INDEX idx_status (status)
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS scores (
     category VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (action_id) REFERENCES actions(id) ON DELETE CASCADE,
-    FOREIGN KEY (farmer_id) REFERENCES farmers(id) ON DELETE CASCADE,
+    FOREIGN KEY (farmer_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_farmer_category (farmer_id, category),
     INDEX idx_date (created_at)
 );
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS badges (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     earned_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (farmer_id) REFERENCES farmers(id) ON DELETE CASCADE,
+    FOREIGN KEY (farmer_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_farmer_date (farmer_id, earned_date)
 );
 
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS recommendations (
     status ENUM('pending', 'applied', 'dismissed') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     applied_at TIMESTAMP NULL,
-    FOREIGN KEY (farmer_id) REFERENCES farmers(id) ON DELETE CASCADE,
+    FOREIGN KEY (farmer_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (action_id) REFERENCES actions(id) ON DELETE SET NULL,
     INDEX idx_farmer_status (farmer_id, status)
 );

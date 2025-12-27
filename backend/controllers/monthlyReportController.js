@@ -7,14 +7,15 @@ const getMonthlyReport = async (req, res) => {
         const { farmerId } = req.params;
         
         // Get actions for this farmer
-        const [farmerActions] = await pool.query('SELECT * FROM actions WHERE farmer_id = ?', [parseInt(farmerId)]);
+        const farmerActionsResult = await pool.query('SELECT * FROM actions WHERE farmer_id = $1', [parseInt(farmerId)]);
+        const farmerActions = farmerActionsResult.rows;
         
         // Get total score for this farmer
-        const [totalScoreResult] = await pool.query('SELECT SUM(score) as total_score FROM scores WHERE farmer_id = ?', [parseInt(farmerId)]);
+        const totalScoreResult = await pool.query('SELECT SUM(score) as total_score FROM scores WHERE farmer_id = $1', [parseInt(farmerId)]);
         
         // Group actions by type for the report
         const actionCounts = {};
-        let totalScore = totalScoreResult[0].total_score || 0;
+        let totalScore = totalScoreResult.rows[0].total_score || 0;
         
         farmerActions.forEach(action => {
             const actionType = action.type;

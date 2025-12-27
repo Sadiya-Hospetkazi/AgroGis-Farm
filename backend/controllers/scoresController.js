@@ -3,7 +3,8 @@ const pool = require('../config/db');
 const getDashboardScores = async (req, res) => {
     const farmerId = parseInt(req.params.farmerId);
 
-    const [scores] = await pool.query('SELECT * FROM scores WHERE farmer_id = ?', [farmerId]);
+    const scoresResult = await pool.query('SELECT * FROM scores WHERE farmer_id = $1', [farmerId]);
+    const scores = scoresResult.rows;
 
     if (scores.length === 0) {
         return res.json({
