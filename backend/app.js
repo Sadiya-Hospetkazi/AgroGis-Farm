@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const path = require('path');
+const { initDatabase } = require('./config/db');
 
 // Load environment variables
 dotenv.config();
@@ -101,10 +102,17 @@ app.use((req, res) => {
     res.status(404).json({ error: 'Route not found' });
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`AgroGig server running on port ${PORT}`);
-    console.log(`Visit http://localhost:${PORT} to access the application`);
-});
+// Initialize database and start server
+initDatabase()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`AgroGig server running on port ${PORT}`);
+            console.log(`Visit http://localhost:${PORT} to access the application`);
+        });
+    })
+    .catch(err => {
+        console.error('Failed to initialize database:', err);
+        process.exit(1);
+    });
 
 module.exports = app;

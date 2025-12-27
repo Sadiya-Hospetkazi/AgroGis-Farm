@@ -1,25 +1,27 @@
 // Monthly Report controller for AgroGig
-const dataStorage = require('../utils/dataStorage');
+const pool = require('../config/db');
 
 // Get monthly report controller
-const getMonthlyReport = (req, res) => {
+const getMonthlyReport = async (req, res) => {
     try {
         const { farmerId } = req.params;
         
         // Get actions for this farmer
-        const farmerActions = dataStorage.getActionsByFarmerId(parseInt(farmerId));
+        const [farmerActions] = await pool.query('SELECT * FROM actions WHERE farmer_id = ?', [parseInt(farmerId)]);
+        
+        // Get total score for this farmer
+        const [totalScoreResult] = await pool.query('SELECT SUM(score) as total_score FROM scores WHERE farmer_id = ?', [parseInt(farmerId)]);
         
         // Group actions by type for the report
         const actionCounts = {};
-        let totalScore = 0;
+        let totalScore = totalScoreResult[0].total_score || 0;
         
         farmerActions.forEach(action => {
-            const actionType = action.actionType || action.type || 'unknown';
+            const actionType = action.type;
             if (!actionCounts[actionType]) {
                 actionCounts[actionType] = 0;
             }
             actionCounts[actionType]++;
-            totalScore += action.pointsEarned || action.score || 5;
         });
         
         // Map to specific report categories

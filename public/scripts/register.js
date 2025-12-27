@@ -1,8 +1,5 @@
-// Use direct URL detection - no hostname guessing
-const API_BASE =
-  window.location.hostname === "localhost"
-    ? "http://localhost:3001"
-    : "https://agrogis-farm-backend.onrender.com";  // Render backend URL
+// Load API base URL from env.js
+const API_BASE = window._env_?.BASE_API_URL || "https://agrogis-farm.onrender.com";
 
 console.log('Using API base URL:', API_BASE);
 

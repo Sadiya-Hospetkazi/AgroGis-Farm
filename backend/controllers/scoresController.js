@@ -1,9 +1,9 @@
-const dataStorage = require('../utils/dataStorage');
+const pool = require('../config/db');
 
-const getDashboardScores = (req, res) => {
+const getDashboardScores = async (req, res) => {
     const farmerId = parseInt(req.params.farmerId);
 
-    const scores = dataStorage.getScoresByFarmerId(farmerId);
+    const [scores] = await pool.query('SELECT * FROM scores WHERE farmer_id = ?', [farmerId]);
 
     if (scores.length === 0) {
         return res.json({
@@ -17,16 +17,23 @@ const getDashboardScores = (req, res) => {
         });
     }
 
-    const latest = scores[scores.length - 1];
-    const cat = latest.categoryScores || {};
+    // Calculate aggregated scores by category
+    const categoryScores = {};
+    scores.forEach(score => {
+        const category = score.category;
+        if (!categoryScores[category]) {
+            categoryScores[category] = 0;
+        }
+        categoryScores[category] += score.score;
+    });
 
     res.json({
         success: true,
         scores: {
-            soil: cat.soil || 0,
-            irrigation: cat.irrigation || 0,
-            sustainability: cat.sustainability || 0,
-            weed: cat.weed || 0
+            soil: categoryScores.soil || 0,
+            irrigation: categoryScores.irrigation || 0,
+            sustainability: categoryScores.sustainability || 0,
+            weed: categoryScores.weed || 0
         }
     });
 };

@@ -14,24 +14,22 @@ exports.register = async (req, res) => {
             });
         }
 
-        // Check if user already exists
-        const existing = await pool.query(
-            'SELECT id FROM users WHERE email = $1',
+        const [existing] = await pool.query(
+            'SELECT id FROM farmers WHERE email = ?',
             [email]
         );
 
-        if (existing.rows.length > 0) {
+        if (existing.length > 0) {
             return res.status(409).json({
                 success: false,
-                message: 'User already exists'
+                message: 'Farmer already exists'
             });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await pool.query(
-            `INSERT INTO users (name, email, password, phone, location, language)
-             VALUES ($1, $2, $3, $4, $5, $6)`,
+            'INSERT INTO farmers (name, email, password, phone, location, language) VALUES (?, ?, ?, ?, ?, ?)',
             [name, email, hashedPassword, phone, location, language]
         );
 
@@ -48,6 +46,53 @@ exports.register = async (req, res) => {
     }
 };
 
+// LOGIN
+exports.login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const [result] = await pool.query(
+            'SELECT * FROM farmers WHERE email = ?',
+            [email]
+        );
+
+        if (result.length === 0) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        const user = result[0];
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials'
+            });
+        }
+
+        const token = jwt.sign(
+            { farmerId: user.id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '1d' }
+        );
+
+        res.json({
+            success: true,
+            token
+        });
+    } catch (error) {
+        console.error('LOGIN ERROR:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+// LOGOUT
 exports.logout = (req, res) => {
     try {
         res.json({
@@ -63,84 +108,39 @@ exports.logout = (req, res) => {
     }
 };
 
+// GET CURRENT USER
 exports.getCurrentUser = async (req, res) => {
     try {
-        // Get user ID from the authenticated request
-        const userId = req.userId;
+        // Get farmer ID from the authenticated request
+        const farmerId = req.farmerId;
         
-        if (!userId) {
+        if (!farmerId) {
             return res.status(404).json({ 
                 success: false,
-                message: 'No user data available' 
+                message: 'No farmer data available' 
             });
         }
         
-        // Get user data from database
-        const result = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
+        // Get farmer data from database
+        const [result] = await pool.query('SELECT * FROM farmers WHERE id = ?', [farmerId]);
         
-        if (result.rows.length === 0) {
+        if (result.length === 0) {
             return res.status(404).json({ 
                 success: false,
-                message: 'No user found' 
+                message: 'No farmer found' 
             });
         }
         
-        const user = result.rows[0];
+        const farmer = result[0];
         
-        // Return user data excluding password
-        const { password: _, ...userData } = user;
+        // Return farmer data excluding password
+        const { password: _, ...farmerData } = farmer;
         res.json({
             success: true,
-            user: userData
+            farmer: farmerData
         });
     } catch (error) {
         console.error('Get current user error:', error);
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-};
-
-// LOGIN
-exports.login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        const result = await pool.query(
-            'SELECT * FROM users WHERE email = $1',
-            [email]
-        );
-
-        if (result.rows.length === 0) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid credentials'
-            });
-        }
-
-        const user = result.rows[0];
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
-            return res.status(401).json({
-                success: false,
-                message: 'Invalid credentials'
-            });
-        }
-
-        const token = jwt.sign(
-            { id: user.id, email: user.email },
-            process.env.JWT_SECRET,
-            { expiresIn: '1d' }
-        );
-
-        res.json({
-            success: true,
-            token
-        });
-    } catch (error) {
-        console.error('LOGIN ERROR:', error);
         res.status(500).json({
             success: false,
             message: error.message
