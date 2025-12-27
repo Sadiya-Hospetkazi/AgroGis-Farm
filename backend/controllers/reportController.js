@@ -1,5 +1,5 @@
 // Report controller for AgroGig
-const pool = require('../config/db');
+const { pool } = require('../config/db');
 
 // Get monthly report controller
 const getMonthlyReport = async (req, res) => {

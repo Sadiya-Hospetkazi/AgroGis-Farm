@@ -1,6 +1,6 @@
 // Authentication middleware for AgroGig
 const jwt = require('jsonwebtoken');
-const pool = require('../config/db');
+const { pool } = require('../config/db');
 
 const authenticateToken = async (req, res, next) => {
     // Get the token from the Authorization header
@@ -18,18 +18,18 @@ const authenticateToken = async (req, res, next) => {
         // Verify the token
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'agrogig_secret_key');
         
-        // Add the farmer data to the request object
-        const result = await pool.query('SELECT * FROM farmers WHERE id = $1', [decoded.farmerId]);
+        // Add the user data to the request object
+        const result = await pool.query('SELECT * FROM users WHERE id = $1', [decoded.id]);
         if (result.rows.length === 0) {
             return res.status(404).json({
-                error: 'Farmer not found',
-                message: 'Associated farmer data not found'
+                error: 'User not found',
+                message: 'Associated user data not found'
             });
         }
         
-        // Attach farmer data to request object
-        req.farmer = result.rows[0];
-        req.farmerId = decoded.farmerId;
+        // Attach user data to request object
+        req.user = result.rows[0];
+        req.userId = decoded.id;
         next();
     } catch (err) {
         return res.status(403).json({

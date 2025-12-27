@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const { pool } = require('../config/db');
 
 const getDashboardScores = async (req, res) => {
     const farmerId = parseInt(req.params.farmerId);

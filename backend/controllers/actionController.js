@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const { pool } = require('../config/db');
 const { calculateScore } = require('../services/scoringService');
 
 const logAction = async (req, res) => {
