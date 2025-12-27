@@ -405,7 +405,7 @@ function loadInsightsPage() {
             const farmerId = data.data.farmer.id;
             
             // Get dashboard scores for that farmer using the correct endpoint
-            return fetch(`${API_BASE}/api/scores/dashboard/${farmerId})
+            return fetch(`${API_BASE}/api/scores/dashboard/${farmerId}`)
                 .then(res => {
                     console.log('Scores API response status:', res.status);
                     return res.json();
@@ -2120,7 +2120,7 @@ function fetchUserProfile() {
     
     console.log('Fetching profile data with auth token:', authToken);
     
-    fetch('http://localhost:3001/api/protected/dashboard', {
+    fetch(`${BASE_API_URL}/api/protected/dashboard`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`

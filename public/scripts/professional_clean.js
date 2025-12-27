@@ -199,6 +199,20 @@ function initializeDashboard() {
     // Any dashboard-specific initialization code would go here
 }
 
+// Define base API URL - use production URL if available, otherwise localhost
+const BASE_API_URL = window._env_ && window._env_.BASE_API_URL 
+    ? window._env_.BASE_API_URL 
+    : window.location.hostname.includes('railway.app') 
+        ? `https://${window.location.hostname}` 
+        : window.location.hostname.includes('vercel.app')
+            ? `https://${window.location.hostname}`
+            : 'http://localhost:3001';
+
+// Use relative URL if BASE_API_URL is empty (same domain deployment)
+const API_BASE = BASE_API_URL ? BASE_API_URL : '';
+
+console.log('Using API base URL:', BASE_API_URL);
+
 // Fetch user data to display personalized greeting
 function fetchUserData() {
     if (!authToken) {
@@ -206,7 +220,7 @@ function fetchUserData() {
         return;
     }
     
-    fetch('http://localhost:3001/api/protected/dashboard', {
+    fetch(`${BASE_API_URL}/api/protected/dashboard`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -239,7 +253,7 @@ function logAction(actionType) {
     console.log('Logging action:', actionType);
     
     // Get farmer ID from localStorage or fetch it
-    fetch('http://localhost:3001/api/protected/dashboard', {
+    fetch(`${API_BASE}/api/protected/dashboard`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -255,7 +269,7 @@ function logAction(actionType) {
             const farmerId = data.data.farmer.id;
             
             // Now log the action with the farmer ID
-            return fetch('http://localhost:3001/api/actions/log', {
+            return fetch(`${API_BASE}/api/actions/log`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -376,7 +390,7 @@ function loadInsightsPage() {
         return;
     }
     
-    fetch('http://localhost:3001/api/protected/dashboard', {
+    fetch(`${BASE_API_URL}/api/protected/dashboard`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -391,7 +405,7 @@ function loadInsightsPage() {
             const farmerId = data.data.farmer.id;
             
             // Get dashboard scores for that farmer using the correct endpoint
-            return fetch(`http://localhost:3001/api/scores/dashboard/${farmerId}`)
+            return fetch(`${API_BASE}/api/scores/dashboard/${farmerId}`)
                 .then(res => {
                     console.log('Scores API response status:', res.status);
                     return res.json();
@@ -605,7 +619,7 @@ function loadReportsPage() {
         return;
     }
     
-    fetch('http://localhost:3001/api/protected/dashboard', {
+    fetch(`${API_BASE}/api/protected/dashboard`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -622,7 +636,7 @@ function loadReportsPage() {
         if (dashboardData.success && dashboardData.data && dashboardData.data.farmer) {
             const farmerId = dashboardData.data.farmer.id;
             // Now fetch the monthly report for this farmer using the correct endpoint
-            return fetch(`http://localhost:3001/api/monthly-reports/monthly/${farmerId}`, {
+            return fetch(`${API_BASE}/api/monthly-reports/monthly/${farmerId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authToken}`
@@ -636,7 +650,7 @@ function loadReportsPage() {
                 console.log('Monthly report API response data:', monthlyReportData);
                 if (monthlyReportData.success && monthlyReportData.report) {
                     // Now fetch badges for this farmer
-                    return fetch(`http://localhost:3001/api/scores/badges/${farmerId}`, {
+                    return fetch(`${API_BASE}/api/scores/badges/${farmerId}`, {
                         method: 'GET',
                         headers: {
                             'Authorization': `Bearer ${authToken}`
@@ -1445,7 +1459,7 @@ if (document.getElementById('loginForm')) {
         const password = document.getElementById('password').value;
         
         // Make API call to login
-        fetch('http://localhost:3001/api/auth/login', {
+        fetch(`${BASE_API_URL}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1486,7 +1500,7 @@ if (document.getElementById('registerForm')) {
         const language = document.getElementById('language').value;
         
         // Make API call to register
-        fetch('http://localhost:3001/api/auth/register', {
+        fetch(`${BASE_API_URL}/api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1825,373 +1839,4 @@ function initProfileComponents() {
             // Hide the edit form and show the name display
             fullNameElement.classList.remove('d-none');
             editNameBtn.classList.remove('d-none');
-            nameEditForm.classList.add('d-none');
-        });
-        
-        cancelNameBtn.addEventListener('click', function() {
-            // Hide the edit form and show the name display
-            fullNameElement.classList.remove('d-none');
-            editNameBtn.classList.remove('d-none');
-            nameEditForm.classList.add('d-none');
-        });
-        
-        // Also save when pressing Enter in the input field
-        nameInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                saveNameBtn.click();
-            }
-        });
-    }
-    
-    // Add event listeners for email editing
-    const editEmailBtn = document.getElementById('editEmailBtn');
-    const emailEditForm = document.getElementById('emailEditForm');
-    const emailAddressElement = document.getElementById('emailAddress');
-    const emailInput = document.getElementById('emailInput');
-    const saveEmailBtn = document.getElementById('saveEmailBtn');
-    const cancelEmailBtn = document.getElementById('cancelEmailBtn');
-    
-    if (editEmailBtn && emailEditForm && emailAddressElement && emailInput && saveEmailBtn && cancelEmailBtn) {
-        editEmailBtn.addEventListener('click', function() {
-            // Show the edit form and hide the email display
-            emailAddressElement.classList.add('d-none');
-            editEmailBtn.classList.add('d-none');
-            emailEditForm.classList.remove('d-none');
-            
-            // Set the input value to current email
-            emailInput.value = emailAddressElement.textContent;
-            emailInput.focus();
-        });
-        
-        saveEmailBtn.addEventListener('click', function() {
-            const newEmail = emailInput.value.trim();
-            if (newEmail) {
-                // Update the displayed email
-                emailAddressElement.textContent = newEmail;
-                // In a real app, you would save this to the server
-                alert('Email updated! (In a real app, this would be saved to the server)');
-            }
-            
-            // Hide the edit form and show the email display
-            emailAddressElement.classList.remove('d-none');
-            editEmailBtn.classList.remove('d-none');
-            emailEditForm.classList.add('d-none');
-        });
-        
-        cancelEmailBtn.addEventListener('click', function() {
-            // Hide the edit form and show the email display
-            emailAddressElement.classList.remove('d-none');
-            editEmailBtn.classList.remove('d-none');
-            emailEditForm.classList.add('d-none');
-        });
-        
-        // Also save when pressing Enter in the input field
-        emailInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                saveEmailBtn.click();
-            }
-        });
-    }
-    
-    // Add event listeners for phone editing
-    const editPhoneBtn = document.getElementById('editPhoneBtn');
-    const phoneEditForm = document.getElementById('phoneEditForm');
-    const phoneNumberElement = document.getElementById('phoneNumber');
-    const phoneInput = document.getElementById('phoneInput');
-    const savePhoneBtn = document.getElementById('savePhoneBtn');
-    const cancelPhoneBtn = document.getElementById('cancelPhoneBtn');
-    
-    if (editPhoneBtn && phoneEditForm && phoneNumberElement && phoneInput && savePhoneBtn && cancelPhoneBtn) {
-        editPhoneBtn.addEventListener('click', function() {
-            // Show the edit form and hide the phone display
-            phoneNumberElement.classList.add('d-none');
-            editPhoneBtn.classList.add('d-none');
-            phoneEditForm.classList.remove('d-none');
-            
-            // Set the input value to current phone
-            phoneInput.value = phoneNumberElement.textContent;
-            phoneInput.focus();
-        });
-        
-        savePhoneBtn.addEventListener('click', function() {
-            const newPhone = phoneInput.value.trim();
-            if (newPhone) {
-                // Update the displayed phone
-                phoneNumberElement.textContent = newPhone;
-                // In a real app, you would save this to the server
-                alert('Phone number updated! (In a real app, this would be saved to the server)');
-            }
-            
-            // Hide the edit form and show the phone display
-            phoneNumberElement.classList.remove('d-none');
-            editPhoneBtn.classList.remove('d-none');
-            phoneEditForm.classList.add('d-none');
-        });
-        
-        cancelPhoneBtn.addEventListener('click', function() {
-            // Hide the edit form and show the phone display
-            phoneNumberElement.classList.remove('d-none');
-            editPhoneBtn.classList.remove('d-none');
-            phoneEditForm.classList.add('d-none');
-        });
-        
-        // Also save when pressing Enter in the input field
-        phoneInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                savePhoneBtn.click();
-            }
-        });
-    }
-    
-    // Add event listeners for location editing
-    const editLocationBtn = document.getElementById('editLocationBtn');
-    const locationEditForm = document.getElementById('locationEditForm');
-    const userLocationElement = document.getElementById('userLocation');
-    const locationInput = document.getElementById('locationInput');
-    const saveLocationBtn = document.getElementById('saveLocationBtn');
-    const cancelLocationBtn = document.getElementById('cancelLocationBtn');
-    
-    if (editLocationBtn && locationEditForm && userLocationElement && locationInput && saveLocationBtn && cancelLocationBtn) {
-        editLocationBtn.addEventListener('click', function() {
-            // Show the edit form and hide the location display
-            userLocationElement.classList.add('d-none');
-            editLocationBtn.classList.add('d-none');
-            locationEditForm.classList.remove('d-none');
-            
-            // Set the input value to current location
-            locationInput.value = userLocationElement.textContent;
-            locationInput.focus();
-        });
-        
-        saveLocationBtn.addEventListener('click', function() {
-            const newLocation = locationInput.value.trim();
-            if (newLocation) {
-                // Update the displayed location
-                userLocationElement.textContent = newLocation;
-                // In a real app, you would save this to the server
-                alert('Location updated! (In a real app, this would be saved to the server)');
-            }
-            
-            // Hide the edit form and show the location display
-            userLocationElement.classList.remove('d-none');
-            editLocationBtn.classList.remove('d-none');
-            locationEditForm.classList.add('d-none');
-        });
-        
-        cancelLocationBtn.addEventListener('click', function() {
-            // Hide the edit form and show the location display
-            userLocationElement.classList.remove('d-none');
-            editLocationBtn.classList.remove('d-none');
-            locationEditForm.classList.add('d-none');
-        });
-        
-        // Also save when pressing Enter in the input field
-        locationInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                saveLocationBtn.click();
-            }
-        });
-    }
-    
-    // Add event listeners for crop editing
-    const editCropBtn = document.getElementById('editCropBtn');
-    const cropEditForm = document.getElementById('cropEditForm');
-    const primaryCropElement = document.getElementById('primaryCrop');
-    const cropInput = document.getElementById('cropInput');
-    const saveCropBtn = document.getElementById('saveCropBtn');
-    const cancelCropBtn = document.getElementById('cancelCropBtn');
-    
-    if (editCropBtn && cropEditForm && primaryCropElement && cropInput && saveCropBtn && cancelCropBtn) {
-        editCropBtn.addEventListener('click', function() {
-            // Show the edit form and hide the crop display
-            primaryCropElement.classList.add('d-none');
-            editCropBtn.classList.add('d-none');
-            cropEditForm.classList.remove('d-none');
-            
-            // Set the input value to current crop
-            cropInput.value = primaryCropElement.textContent;
-            cropInput.focus();
-        });
-        
-        saveCropBtn.addEventListener('click', function() {
-            const newCrop = cropInput.value.trim();
-            if (newCrop) {
-                // Update the displayed crop
-                primaryCropElement.textContent = newCrop;
-                // In a real app, you would save this to the server
-                alert('Primary crop updated! (In a real app, this would be saved to the server)');
-            }
-            
-            // Hide the edit form and show the crop display
-            primaryCropElement.classList.remove('d-none');
-            editCropBtn.classList.remove('d-none');
-            cropEditForm.classList.add('d-none');
-        });
-        
-        cancelCropBtn.addEventListener('click', function() {
-            // Hide the edit form and show the crop display
-            primaryCropElement.classList.remove('d-none');
-            editCropBtn.classList.remove('d-none');
-            cropEditForm.classList.add('d-none');
-        });
-        
-        // Also save when pressing Enter in the input field
-        cropInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                saveCropBtn.click();
-            }
-        });
-    }
-    
-    // Add event listeners for farm size editing
-    const editFarmSizeBtn = document.getElementById('editFarmSizeBtn');
-    const farmSizeEditForm = document.getElementById('farmSizeEditForm');
-    const farmSizeElement = document.getElementById('farmSize');
-    const farmSizeInput = document.getElementById('farmSizeInput');
-    const saveFarmSizeBtn = document.getElementById('saveFarmSizeBtn');
-    const cancelFarmSizeBtn = document.getElementById('cancelFarmSizeBtn');
-    
-    if (editFarmSizeBtn && farmSizeEditForm && farmSizeElement && farmSizeInput && saveFarmSizeBtn && cancelFarmSizeBtn) {
-        editFarmSizeBtn.addEventListener('click', function() {
-            // Show the edit form and hide the farm size display
-            farmSizeElement.classList.add('d-none');
-            editFarmSizeBtn.classList.add('d-none');
-            farmSizeEditForm.classList.remove('d-none');
-            
-            // Set the input value to current farm size
-            farmSizeInput.value = farmSizeElement.textContent;
-            farmSizeInput.focus();
-        });
-        
-        saveFarmSizeBtn.addEventListener('click', function() {
-            const newFarmSize = farmSizeInput.value.trim();
-            if (newFarmSize) {
-                // Update the displayed farm size
-                farmSizeElement.textContent = newFarmSize;
-                // In a real app, you would save this to the server
-                alert('Farm size updated! (In a real app, this would be saved to the server)');
-            }
-            
-            // Hide the edit form and show the farm size display
-            farmSizeElement.classList.remove('d-none');
-            editFarmSizeBtn.classList.remove('d-none');
-            farmSizeEditForm.classList.add('d-none');
-        });
-        
-        cancelFarmSizeBtn.addEventListener('click', function() {
-            // Hide the edit form and show the farm size display
-            farmSizeElement.classList.remove('d-none');
-            editFarmSizeBtn.classList.remove('d-none');
-            farmSizeEditForm.classList.add('d-none');
-        });
-        
-        // Also save when pressing Enter in the input field
-        farmSizeInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                saveFarmSizeBtn.click();
-            }
-        });
-    }
-    
-    // Fetch and display user profile data
-    fetchUserProfile();
-}
-
-// Fetch user profile data
-function fetchUserProfile() {
-    if (!authToken) {
-        console.log('No auth token available for profile fetch');
-        return;
-    }
-    
-    console.log('Fetching profile data with auth token:', authToken);
-    
-    fetch('http://localhost:3001/api/protected/dashboard', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${authToken}`
-        }
-    })
-    .then(response => {
-        console.log('Profile API response status:', response.status);
-        return response.json();
-    })
-    .then(data => {
-        console.log('Profile API response data:', data);
-        if (data.success && data.data && data.data.farmer) {
-            const farmer = data.data.farmer;
-            document.getElementById('fullName').textContent = farmer.name || 'Not specified';
-            document.getElementById('emailAddress').textContent = farmer.email || 'Not specified';
-            document.getElementById('phoneNumber').textContent = farmer.phone || 'Not specified';
-            document.getElementById('userLocation').textContent = farmer.location || 'Not specified';
-            document.getElementById('primaryCrop').textContent = farmer.crop || 'Not specified';
-            document.getElementById('farmSize').textContent = farmer.farmSize || 'Not specified';
-            
-            // Update profile image with user's name
-            const profileImage = document.getElementById('profileImage');
-            if (profileImage && farmer.name) {
-                // Create avatar URL with user's name
-                const nameParts = farmer.name.split(' ');
-                const firstName = nameParts[0];
-                const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
-                const displayName = firstName + (lastName ? '+' + lastName : '');
-                const newSrc = `https://ui-avatars.com/api/?name=${displayName}&background=2E8B57&color=fff&size=128`;
-                profileImage.src = newSrc;
-            }
-            
-            // Format dates
-            if (farmer.createdAt) {
-                const createdDate = new Date(farmer.createdAt);
-                document.getElementById('memberSince').textContent = createdDate.toLocaleDateString();
-            }
-            
-            if (farmer.lastLogin) {
-                const loginDate = new Date(farmer.lastLogin);
-                document.getElementById('lastLogin').textContent = loginDate.toLocaleDateString();
-            }
-        } else {
-            console.error('Profile data structure is not as expected:', data);
-            // Show error message in UI
-            document.getElementById('fullName').textContent = 'Error loading profile data';
-            document.getElementById('emailAddress').textContent = 'Please try again later';
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching profile data:', error);
-        // Show error message in UI
-        document.getElementById('fullName').textContent = 'Error connecting to server';
-        document.getElementById('emailAddress').textContent = error.message;
-    });
-}
-
-// Initialize logout components
-function initLogoutComponents() {
-    // Add event listeners for logout buttons
-    const confirmLogout = document.getElementById('confirmLogout');
-    const cancelLogout = document.getElementById('cancelLogout');
-    
-    if (confirmLogout) {
-        confirmLogout.addEventListener('click', function() {
-            logoutUser();
-        });
-    }
-    
-    if (cancelLogout) {
-        cancelLogout.addEventListener('click', function() {
-            // Go back to dashboard
-            window.location.hash = '#dashboard';
-            document.querySelector('[data-page="dashboard"]').click();
-        });
-    }
-}
-
-// Logout user function
-function logoutUser() {
-    // Clear all session data
-    localStorage.removeItem('agrogig_token');
-    sessionStorage.clear();
-    // Also clear any other stored data
-    localStorage.removeItem('preferredLanguage');
-    // Redirect to login
-    window.location.href = '/login.html';
-}
+            nameEdit

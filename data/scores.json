@@ -30,20 +30,20 @@
   {
     "id": 1764394332089,
     "farmerId": 3,
-    "totalPoints": 250,
-    "actionsCount": 48,
+    "totalPoints": 260,
+    "actionsCount": 50,
     "categoryScores": {
       "watering": 50,
       "weeding": 20,
       "fertilizing": 20,
-      "irrigation": 80,
+      "irrigation": 90,
       "crop monitoring": 10,
       "soil check": 20,
       "sustainability": 8,
       "weed": 16,
       "soil": 26
     },
-    "lastUpdated": "2025-11-30T14:16:56.378Z"
+    "lastUpdated": "2025-12-27T13:56:23.184Z"
   },
   {
     "id": 1764653794741,

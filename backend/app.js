@@ -13,8 +13,9 @@ const PORT = process.env.PORT || 3001; // Changed to 3001
 
 // Middleware
 app.use(cors({
-  origin: true,
-  credentials: true
+  origin: "*",
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

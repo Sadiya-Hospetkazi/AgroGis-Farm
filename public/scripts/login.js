@@ -1,18 +1,10 @@
-// Get BASE_API_URL from environment or use default
-const BASE_API_URL = window._env_ && window._env_.BASE_API_URL 
-    ? window._env_.BASE_API_URL 
-    : window.location.hostname.includes('railway.app') 
-        ? `https://${window.location.hostname}` 
-        : window.location.hostname.includes('vercel.app')
-            ? `https://${window.location.hostname}`
-            : 'http://localhost:3001';
+// Use direct URL detection - no hostname guessing
+const API_BASE =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3001"
+    : "https://agrogis-farm-production.up.railway.app";  // Replace with your actual backend URL
 
-console.log("FINAL API URL:", BASE_API_URL);
-
-// Use relative URL if BASE_API_URL is empty (same domain deployment)
-const API_BASE = BASE_API_URL ? BASE_API_URL : '';
-
-console.log('Using API base URL:', BASE_API_URL);
+console.log('Using API base URL:', API_BASE);
 
 // Function to handle login form submission
 function handleLogin(e) {

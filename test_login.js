@@ -1,4 +1,4 @@
-// fetch is built-in in Node 18+, so no need to require it
+const fetch = require('node-fetch').default;
 
 async function testLogin() {
     try {

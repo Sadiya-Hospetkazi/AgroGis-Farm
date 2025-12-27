@@ -19,7 +19,8 @@
     "i18next-http-backend": "^2.2.0",
     "jsonwebtoken": "^9.0.2",
     "jspdf": "^3.0.4",
-    "mysql2": "^3.6.0"
+    "mysql2": "^3.6.0",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

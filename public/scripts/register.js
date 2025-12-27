@@ -1,19 +1,12 @@
-// Get BASE_API_URL from environment or use default
-const BASE_API_URL = window._env_ && window._env_.BASE_API_URL 
-    ? window._env_.BASE_API_URL 
-    : window.location.hostname.includes('railway.app') 
-        ? `https://${window.location.hostname}` 
-        : window.location.hostname.includes('vercel.app')
-            ? `https://${window.location.hostname}`
-            : 'http://localhost:3001';
+// Use direct URL detection - no hostname guessing
+const API_BASE =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3001"
+    : "https://agrogis-farm-production.up.railway.app";  // Replace with your actual backend URL
 
-console.log("FINAL API URL:", BASE_API_URL);
+console.log('Using API base URL:', API_BASE);
 
-// Use relative URL if BASE_API_URL is empty (same domain deployment)
-const API_BASE = BASE_API_URL ? BASE_API_URL : '';
-
-console.log('Using API base URL:', BASE_API_URL);
-
+// Function to handle registration form submission
 // Function to handle registration form submission
 function handleRegister(e) {
     e.preventDefault();
@@ -36,7 +29,6 @@ function handleRegister(e) {
     })
     .then(response => {
         console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
         
         // Always try to parse JSON, even for error responses
         return response.text().then(text => {
@@ -53,11 +45,18 @@ function handleRegister(e) {
         console.log('Parsed response:', { status, data });
         
         if (status >= 200 && status < 300 && data.success) {
-            // Show success message
-            alert('Registration successful! Please login with your credentials.');
-            
-            // Redirect to login page
-            window.location.href = 'login.html';
+            // Auto-login after successful registration - store token if available
+            if (data.token) {
+                localStorage.setItem('agrogig_token', data.token);
+                console.log('User automatically logged in after registration');
+                
+                // Redirect to dashboard
+                window.location.href = 'dashboard-professional.html';
+            } else {
+                // Fallback: show success message and redirect to login
+                alert('Registration successful! Please login with your credentials.');
+                window.location.href = 'login.html';
+            }
         } else {
             const errorMessage = data.message || data.error || 'Registration failed. Please try again.';
             alert('Registration failed: ' + errorMessage);
