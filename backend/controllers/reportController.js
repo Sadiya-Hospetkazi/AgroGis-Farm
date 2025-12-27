@@ -4,25 +4,25 @@ const { pool } = require('../config/db');
 // Get monthly report controller
 const getMonthlyReport = async (req, res) => {
     try {
-        const { farmerId } = req.params;
+        const userId = req.userId; // Get user ID from authenticated request
         
-        // Get real actions for this farmer for the current month
+        // Get real actions for this user for the current month
         const currentDate = new Date();
         const currentMonth = currentDate.toISOString().substring(0, 7); // YYYY-MM
         
         const farmerActionsResult = await pool.query(
             'SELECT * FROM actions WHERE farmer_id = $1 AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE) AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)',
-            [farmerId]
+            [userId]
         );
         const farmerActions = farmerActionsResult.rows;
         
         // Calculate statistics
         const totalActions = farmerActions.length;
         
-        // Get total score for this farmer
+        // Get total score for this user
         const farmerScoresResult = await pool.query(
             'SELECT SUM(score) as total_score FROM scores WHERE farmer_id = $1',
-            [farmerId]
+            [userId]
         );
         
         const totalScore = farmerScoresResult.rows[0].total_score || 0;
@@ -75,10 +75,10 @@ const getMonthlyReport = async (req, res) => {
 // Get action distribution controller
 const getActionDistribution = async (req, res) => {
     try {
-        const { farmerId } = req.params;
+        const userId = req.userId; // Get user ID from authenticated request
         
-        // Get real actions for this farmer
-        const farmerActionsResult = await pool.query('SELECT * FROM actions WHERE farmer_id = $1', [farmerId]);
+        // Get real actions for this user
+        const farmerActionsResult = await pool.query('SELECT * FROM actions WHERE farmer_id = $1', [userId]);
         const farmerActions = farmerActionsResult.rows;
         
         // Calculate distribution
@@ -108,10 +108,10 @@ const getActionDistribution = async (req, res) => {
 const getRecommendations = async (req, res) => {
     try {
         // In a real implementation, this would use AI/ML to generate personalized recommendations
-        // For this demo, we'll return generic recommendations based on farmer's actions
+        // For this demo, we'll return generic recommendations based on user's actions
         
-        const { farmerId } = req.params;
-        const farmerActionsResult = await pool.query('SELECT * FROM actions WHERE farmer_id = $1', [farmerId]);
+        const userId = req.userId; // Get user ID from authenticated request
+        const farmerActionsResult = await pool.query('SELECT * FROM actions WHERE farmer_id = $1', [userId]);
         const farmerActions = farmerActionsResult.rows;
         
         // Generate recommendations based on actions
@@ -161,7 +161,8 @@ const getRecommendations = async (req, res) => {
 // Claim reward controller
 const claimReward = (req, res) => {
     try {
-        const { rewardId, farmerId } = req.body;
+        const { rewardId } = req.body;
+        const userId = req.userId; // Get user ID from authenticated request
         
         // In a real implementation, this would process the reward claim
         // For this demo, we'll just return a success response
@@ -175,7 +176,7 @@ const claimReward = (req, res) => {
             couponCode,
             rewardDetails: {
                 rewardId,
-                farmerId,
+                farmerId: userId,
                 claimedDate: new Date(),
                 expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
             }

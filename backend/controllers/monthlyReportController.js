@@ -4,14 +4,14 @@ const { pool } = require('../config/db');
 // Get monthly report controller
 const getMonthlyReport = async (req, res) => {
     try {
-        const { farmerId } = req.params;
+        const userId = req.userId; // Get user ID from authenticated request
         
-        // Get actions for this farmer
-        const farmerActionsResult = await pool.query('SELECT * FROM actions WHERE farmer_id = $1', [parseInt(farmerId)]);
+        // Get actions for this user
+        const farmerActionsResult = await pool.query('SELECT * FROM actions WHERE farmer_id = $1', [userId]);
         const farmerActions = farmerActionsResult.rows;
         
-        // Get total score for this farmer
-        const totalScoreResult = await pool.query('SELECT SUM(score) as total_score FROM scores WHERE farmer_id = $1', [parseInt(farmerId)]);
+        // Get total score for this user
+        const totalScoreResult = await pool.query('SELECT SUM(score) as total_score FROM scores WHERE farmer_id = $1', [userId]);
         
         // Group actions by type for the report
         const actionCounts = {};

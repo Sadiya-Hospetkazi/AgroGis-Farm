@@ -252,38 +252,17 @@ function logAction(actionType) {
     
     console.log('Logging action:', actionType);
     
-    // Get farmer ID from localStorage or fetch it
-    fetch(`${API_BASE}/api/protected/dashboard`, {
-        method: 'GET',
+    // Log the action directly using the authenticated user's identity
+    return fetch(`${API_BASE}/api/actions/log`, {
+        method: 'POST',
         headers: {
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${authToken}`
-        }
-    })
-    .then(response => {
-        console.log('Dashboard API response status:', response.status);
-        return response.json();
-    })
-    .then(data => {
-        console.log('Dashboard API response data:', data);
-        if (data.success && data.data && data.data.farmer) {
-            const farmerId = data.data.farmer.id;
-            
-            // Now log the action with the farmer ID
-            return fetch(`${API_BASE}/api/actions/log`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authToken}`
-                },
-                body: JSON.stringify({
-                    farmerId: farmerId,
-                    type: actionType,
-                    description: `Logged ${actionType} action`
-                })
-            });
-        } else {
-            throw new Error('Failed to get farmer data: ' + JSON.stringify(data));
-        }
+        },
+        body: JSON.stringify({
+            type: actionType,
+            description: `Logged ${actionType} action`
+        })
     })
     .then(response => {
         console.log('Log action API response status:', response.status);
@@ -1773,6 +1752,9 @@ function initVoiceAssistantComponents() {
 
 // Initialize profile components
 function initProfileComponents() {
+    // Load user profile data first
+    loadProfileData();
+    
     // Add event listener for change photo button
     const changePhotoBtn = document.getElementById('changePhotoBtn');
     const photoUpload = document.getElementById('photoUpload');
@@ -2120,7 +2102,7 @@ function fetchUserProfile() {
     
     console.log('Fetching profile data with auth token:', authToken);
     
-    fetch(`${BASE_API_URL}/api/protected/dashboard`, {
+    fetch(`${BASE_API_URL}/api/auth/me`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -2132,20 +2114,20 @@ function fetchUserProfile() {
     })
     .then(data => {
         console.log('Profile API response data:', data);
-        if (data.success && data.data && data.data.farmer) {
-            const farmer = data.data.farmer;
-            document.getElementById('fullName').textContent = farmer.name || 'Not specified';
-            document.getElementById('emailAddress').textContent = farmer.email || 'Not specified';
-            document.getElementById('phoneNumber').textContent = farmer.phone || 'Not specified';
-            document.getElementById('userLocation').textContent = farmer.location || 'Not specified';
-            document.getElementById('primaryCrop').textContent = farmer.crop || 'Not specified';
-            document.getElementById('farmSize').textContent = farmer.farmSize || 'Not specified';
+        if (data.success && data.user) {
+            const user = data.user;
+            document.getElementById('fullName').textContent = user.name || 'Not specified';
+            document.getElementById('emailAddress').textContent = user.email || 'Not specified';
+            document.getElementById('phoneNumber').textContent = user.phone || 'Not specified';
+            document.getElementById('userLocation').textContent = user.location || 'Not specified';
+            document.getElementById('primaryCrop').textContent = user.crop || 'Not specified';
+            document.getElementById('farmSize').textContent = user.farmSize || 'Not specified';
             
             // Update profile image with user's name
             const profileImage = document.getElementById('profileImage');
-            if (profileImage && farmer.name) {
+            if (profileImage && user.name) {
                 // Create avatar URL with user's name
-                const nameParts = farmer.name.split(' ');
+                const nameParts = user.name.split(' ');
                 const firstName = nameParts[0];
                 const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
                 const displayName = firstName + (lastName ? '+' + lastName : '');
@@ -2154,13 +2136,13 @@ function fetchUserProfile() {
             }
             
             // Format dates
-            if (farmer.createdAt) {
-                const createdDate = new Date(farmer.createdAt);
+            if (user.createdAt) {
+                const createdDate = new Date(user.createdAt);
                 document.getElementById('memberSince').textContent = createdDate.toLocaleDateString();
             }
             
-            if (farmer.lastLogin) {
-                const loginDate = new Date(farmer.lastLogin);
+            if (user.lastLogin) {
+                const loginDate = new Date(user.lastLogin);
                 document.getElementById('lastLogin').textContent = loginDate.toLocaleDateString();
             }
         } else {
