@@ -2,7 +2,7 @@
 const API_BASE =
   window.location.hostname === "localhost"
     ? "http://localhost:3001"
-    : "https://agrogis-farm-production.up.railway.app";  // Replace with your actual backend URL
+    : "https://agrogis-farm.onrender.com";  // Render backend URL
 
 console.log('Using API base URL:', API_BASE);
 

@@ -89,6 +89,8 @@ const login = (req, res) => {
 // Register controller
 const register = (req, res) => {
     try {
+        console.log("REGISTER BODY:", req.body);
+        
         const { name, email, password, phone, location, language } = req.body;
         
         // Check if farmer already exists
@@ -144,10 +146,10 @@ const register = (req, res) => {
             farmer: farmerData
         });
     } catch (error) {
-        console.error('Registration error:', error);
-        res.status(500).json({ 
-            error: 'Registration failed',
-            message: error.message 
+        console.error("REGISTER ERROR:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Server error"
         });
     }
 };

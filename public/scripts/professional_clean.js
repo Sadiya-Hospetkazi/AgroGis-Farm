@@ -200,18 +200,13 @@ function initializeDashboard() {
 }
 
 // Define base API URL - use production URL if available, otherwise localhost
-const BASE_API_URL = window._env_ && window._env_.BASE_API_URL 
-    ? window._env_.BASE_API_URL 
-    : window.location.hostname.includes('railway.app') 
-        ? `https://${window.location.hostname}` 
-        : window.location.hostname.includes('vercel.app')
-            ? `https://${window.location.hostname}`
-            : 'http://localhost:3001';
+// Use direct URL detection - no hostname guessing
+const API_BASE =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3001"
+    : "https://agrogis-farm.onrender.com";  // Render backend URL
 
-// Use relative URL if BASE_API_URL is empty (same domain deployment)
-const API_BASE = BASE_API_URL ? BASE_API_URL : '';
-
-console.log('Using API base URL:', BASE_API_URL);
+console.log('Using API base URL:', API_BASE);
 
 // Fetch user data to display personalized greeting
 function fetchUserData() {
@@ -220,7 +215,7 @@ function fetchUserData() {
         return;
     }
     
-    fetch(`${BASE_API_URL}/api/protected/dashboard`, {
+    fetch(`${API_BASE}/api/protected/dashboard`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -390,7 +385,7 @@ function loadInsightsPage() {
         return;
     }
     
-    fetch(`${BASE_API_URL}/api/protected/dashboard`, {
+    fetch(`${API_BASE}/api/protected/dashboard`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -1459,7 +1454,7 @@ if (document.getElementById('loginForm')) {
         const password = document.getElementById('password').value;
         
         // Make API call to login
-        fetch(`${BASE_API_URL}/api/auth/login`, {
+        fetch(`${API_BASE}/api/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1500,7 +1495,7 @@ if (document.getElementById('registerForm')) {
         const language = document.getElementById('language').value;
         
         // Make API call to register
-        fetch(`${BASE_API_URL}/api/auth/register`, {
+        fetch(`${API_BASE}/api/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -1839,4 +1834,43 @@ function initProfileComponents() {
             // Hide the edit form and show the name display
             fullNameElement.classList.remove('d-none');
             editNameBtn.classList.remove('d-none');
-            nameEdit
+        }
+
+        // Add event listener for save name button
+        saveNameBtn.addEventListener('click', function () {
+            const newName = nameInput.value.trim();
+
+            if (newName) {
+                // Update displayed name
+                fullNameElement.textContent = newName;
+
+                alert('Name updated! (In a real app, this would be saved to the server)');
+
+                // Update avatar
+                const profileImage = document.getElementById('profileImage');
+                if (profileImage) {
+                    const nameParts = newName.split(' ');
+                    const firstName = nameParts[0];
+                    const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+                    const displayName = firstName + (lastName ? '+' + lastName : '');
+                    profileImage.src = `https://ui-avatars.com/api/?name=${displayName}&background=2E8B57&color=fff&size=128`;
+                }
+            }
+
+            // ✅ FIX: hide edit form
+            nameEditForm.classList.add('d-none');
+
+            // ✅ show name + edit button again
+            fullNameElement.classList.remove('d-none');
+            editNameBtn.classList.remove('d-none');
+        });
+
+        // Add cancel event listener
+        cancelNameBtn.addEventListener('click', function() {
+            // Hide the edit form and show the name display
+            nameEditForm.classList.add('d-none');
+            fullNameElement.classList.remove('d-none');
+            editNameBtn.classList.remove('d-none');
+        });
+    }
+}
