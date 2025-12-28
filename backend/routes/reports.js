@@ -1,7 +1,7 @@
 // Reports routes for AgroGig
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../middleware/authMiddleware');
+const authenticateToken = require('../middleware/authMiddleware');
 const reportController = require('../controllers/reportController');
 
 // Get monthly report for the authenticated user

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../middleware/authMiddleware');
+const authenticateToken = require('../middleware/authMiddleware');
 const { getDashboardScores, addScore } = require('../controllers/scoresController');
 
 router.get('/dashboard', authenticateToken, getDashboardScores);

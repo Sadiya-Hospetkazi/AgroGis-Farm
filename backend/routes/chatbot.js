@@ -1,7 +1,7 @@
 // Chatbot routes for AgroGig
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../middleware/authMiddleware');
+const authenticateToken = require('../middleware/authMiddleware');
 const dataStorage = require('../utils/dataStorage');
 
 // Mock knowledge base for farming questions

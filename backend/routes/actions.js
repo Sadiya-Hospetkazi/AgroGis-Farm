@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { authenticateToken } = require('../middleware/authMiddleware');
+const authenticateToken = require('../middleware/authMiddleware');
 const { logAction, getFarmerActions } = require('../controllers/actionController');
 
 // Log a farming action (protected route - uses authenticated user's ID)

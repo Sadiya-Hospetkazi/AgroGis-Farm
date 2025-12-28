@@ -48,10 +48,26 @@ const addScore = async (req, res) => {
             return res.status(401).json({ success: false, message: 'User not authenticated' });
         }
 
+        // For direct score additions, we'll set action_id to null and determine category from action_type
+        let category = "";
+        if (action_type.toLowerCase().includes('water')) {
+            category = "water";
+        } else if (action_type.toLowerCase().includes('fertiliz')) {
+            category = "fertilizer";
+        } else if (action_type.toLowerCase().includes('weed')) {
+            category = "weed";
+        } else if (action_type.toLowerCase().includes('monitor')) {
+            category = "monitoring";
+        } else if (action_type.toLowerCase().includes('irrigation')) {
+            category = "irrigation";
+        } else if (action_type.toLowerCase().includes('soil')) {
+            category = "soil";
+        }
+        
         await pool.query(
-            `INSERT INTO scores (farmer_id, action_type, score)
-             VALUES ($1, $2, $3)`,
-            [userId, action_type, points]
+            `INSERT INTO scores (action_id, farmer_id, score, category, action_type)
+             VALUES (NULL, $1, $2, $3, $4)`,
+            [userId, points, category, action_type]
         );
 
         res.json({ success: true, message: 'Score added successfully' });

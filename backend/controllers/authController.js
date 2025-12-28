@@ -1,9 +1,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { pool } = require('../config/db');
+const pool = require('../config/db');
 
 // REGISTER
-exports.register = async (req, res) => {
+const register = async (req, res) => {
   try {
     const { name, email, password, phone, location, language } = req.body;
 
@@ -14,12 +14,12 @@ exports.register = async (req, res) => {
       });
     }
 
-    const existing = await pool.query(
+    const result = await pool.query(
       'SELECT id FROM users WHERE email = $1',
       [email]
     );
 
-    if (existing.rows.length > 0) {
+    if (result.rows.length > 0) {
       return res.status(409).json({
         success: false,
         message: 'User already exists'
@@ -28,38 +28,25 @@ exports.register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await pool.query(
+    await pool.query(
       `INSERT INTO users (name, email, password, phone, location, language)
-       VALUES ($1, $2, $3, $4, $5, $6)
-       RETURNING id, name, email`,
+       VALUES ($1, $2, $3, $4, $5, $6)`,
       [name, email, hashedPassword, phone, location, language || 'en']
-    );
-
-    const user = result.rows[0];
-
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET || 'agrogig_secret_key',
-      { expiresIn: '1d' }
     );
 
     res.status(201).json({
       success: true,
-      message: 'Registration successful',
-      token,
-      user
+      message: 'User registered successfully'
     });
+
   } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error'
-    });
+    console.error('REGISTER ERROR:', error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
 // LOGIN
-exports.login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -69,94 +56,65 @@ exports.login = async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid credentials'
-      });
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
     const user = result.rows[0];
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid credentials'
-      });
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET || 'agrogig_secret_key',
+      { userId: user.id },
+      process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
     res.json({
       success: true,
       token,
-      user: { id: user.id, name: user.name, email: user.email }
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email
+      }
     });
+
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error'
-    });
+    console.error('LOGIN ERROR:', error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// LOGOUT
-exports.logout = (req, res) => {
+// GET CURRENT USER (PROFILE)
+const getCurrentUser = async (req, res) => {
   try {
-    res.json({
-      success: true,
-      message: 'Logged out successfully'
-    });
-  } catch (error) {
-    console.error('Logout error:', error);
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
-
-// GET CURRENT USER
-exports.getCurrentUser = async (req, res) => {
-  try {
-    // Get user ID from the authenticated request
     const userId = req.userId;
-    
-    if (!userId) {
-      return res.status(404).json({ 
-        success: false,
-        message: 'No user data available' 
-      });
-    }
-    
-    // Get user data from database
-    const result = await pool.query('SELECT * FROM users WHERE id = $1', [userId]);
-    
+
+    const result = await pool.query(
+      'SELECT id, name, email, phone, location, language FROM users WHERE id = $1',
+      [userId]
+    );
+
     if (result.rows.length === 0) {
-      return res.status(404).json({ 
-        success: false,
-        message: 'No user found' 
-      });
+      return res.status(404).json({ success: false, message: 'User not found' });
     }
-    
-    const user = result.rows[0];
-    
-    // Return user data excluding password
-    const { password: _, ...userData } = user;
+
     res.json({
       success: true,
-      user: userData
+      user: result.rows[0]
     });
+
   } catch (error) {
-    console.error('Get current user error:', error);
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
+    console.error('GET USER ERROR:', error);
+    res.status(500).json({ success: false, message: error.message });
   }
+};
+
+module.exports = {
+  register,
+  login,
+  getCurrentUser
 };
