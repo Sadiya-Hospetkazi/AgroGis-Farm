@@ -40,7 +40,7 @@ const register = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email },
       process.env.JWT_SECRET || 'agrogig_secret_key',
-      { expiresIn: '1d' }
+      { expiresIn: '7d' }
     );
 
     res.status(201).json({
@@ -80,7 +80,7 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email },
       process.env.JWT_SECRET || 'agrogig_secret_key',
-      { expiresIn: '1d' }
+      { expiresIn: '7d' }
     );
 
     res.json({ success: true, token, user: { id: user.id, name: user.name, email } });
