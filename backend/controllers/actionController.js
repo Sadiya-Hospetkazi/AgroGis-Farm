@@ -35,43 +35,37 @@ const logAction = async (req, res) => {
         const location = user && user.location ? user.location : 'Punjab, India';
 
         console.log("Score calculation started:", type);
-        const scorePoints = await calculateScore(type, location);
-
-        // Get existing scores for this user
-        const existingScores = await pool.query('SELECT * FROM scores WHERE farmer_id = $1', [userId]);
+        // Calculate score using the scoring service (with weather adjustments)
+        const calculatedScore = await calculateScore(type, location);
         
-        // Calculate score based on action type
-        let scoreValue = 0;
+        // Determine category based on action type
         let category = "";
         
         // Normalize action type to lowercase for consistent comparison
         const normalizedType = type.toLowerCase();
         
-        // Use exact matching instead of includes to prevent incorrect mappings
+        // Map action type to category
         if (normalizedType === "watering") {
-            scoreValue = 5;
             category = "water";
         } else if (normalizedType === "fertilizing") {
-            scoreValue = 10;
             category = "fertilizer";
         } else if (normalizedType === "weeding") {
-            scoreValue = 8;
             category = "weed";
         } else if (normalizedType === "monitoring") {
-            scoreValue = 4;
             category = "monitoring";
         } else if (normalizedType === "irrigation") {
-            scoreValue = 5;
             category = "irrigation";
         } else if (normalizedType === "soil") {
-            scoreValue = 6;
             category = "soil";
         }
         
+        // Use the calculated score instead of hardcoded values
+        const scoreValue = calculatedScore;
+        
         // Insert the score into the database
         const scoreResult = await pool.query(
-            'INSERT INTO scores (action_id, farmer_id, score, category) VALUES ($1, $2, $3, $4)',
-            [newAction.id, userId, scoreValue, category]
+            'INSERT INTO scores (action_id, farmer_id, score, category, action_type) VALUES ($1, $2, $3, $4, $5)',
+            [newAction.id, userId, scoreValue, category, normalizedType]
         );
         
         // Calculate total score for this user

@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const pool = require('./config/db');
+const authenticateToken = require('./middleware/authMiddleware');
 
 // Create Express app
 const app = express();
@@ -40,6 +41,59 @@ app.use('/api/reports', reportsRoutes);
 app.use('/api/monthly-reports', monthlyReportsRoutes);
 app.use('/api/protected', protectedRoutes);
 app.use('/api/chatbot', chatbotRoutes);
+
+// Test route to verify database connection
+app.get('/api/test-db', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT NOW()');
+    res.json({ success: true, time: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Test endpoint for scores aggregation
+app.get('/api/test-scores', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.userId;
+    
+    // Get scores for this user
+    const scoresResult = await pool.query('SELECT * FROM scores WHERE farmer_id = $1', [userId]);
+    const scores = scoresResult.rows;
+    
+    // Get total score for this user
+    const totalScoreResult = await pool.query('SELECT SUM(score) as total_score FROM scores WHERE farmer_id = $1', [userId]);
+    
+    // Group scores by action type for the report
+    const scoreTotals = {};
+    let totalScore = totalScoreResult.rows[0].total_score || 0;
+    
+    scores.forEach(score => {
+      const actionType = score.action_type || score.category;
+      if (!scoreTotals[actionType]) {
+        scoreTotals[actionType] = 0;
+      }
+      scoreTotals[actionType] += score.score;
+    });
+    
+    res.json({
+      success: true,
+      message: 'Scores aggregation test successful',
+      userId: userId,
+      totalScore: totalScore,
+      scoreTotals: scoreTotals,
+      scores: scores
+    });
+  } catch (err) {
+    console.error('Scores Test error:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Scores test failed',
+      error: err.message
+    });
+  }
+});
 
 // Serve frontend pages
 app.get('/', (req, res) => {

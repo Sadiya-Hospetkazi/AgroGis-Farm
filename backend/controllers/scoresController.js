@@ -33,10 +33,32 @@ const getDashboardScores = async (req, res) => {
         scores: {
             soil: categoryScores.soil || 0,
             irrigation: categoryScores.irrigation || 0,
-            sustainability: categoryScores.sustainability || 0,
+            sustainability: categoryScores.fertilizer || 0,
             weed: categoryScores.weed || 0
         }
     });
 };
 
-module.exports = { getDashboardScores };
+const addScore = async (req, res) => {
+    try {
+        const { action_type, points } = req.body;
+        const userId = req.userId;
+
+        if (!userId) {
+            return res.status(401).json({ success: false, message: 'User not authenticated' });
+        }
+
+        await pool.query(
+            `INSERT INTO scores (farmer_id, action_type, score)
+             VALUES ($1, $2, $3)`,
+            [userId, action_type, points]
+        );
+
+        res.json({ success: true, message: 'Score added successfully' });
+    } catch (err) {
+        console.error('Score insert error:', err);
+        res.status(500).json({ success: false, message: 'Failed to add score' });
+    }
+};
+
+module.exports = { getDashboardScores, addScore };

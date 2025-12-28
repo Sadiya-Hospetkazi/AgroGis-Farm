@@ -220,7 +220,7 @@ function fetchUserData() {
         return;
     }
     
-    fetch(`${BASE_API_URL}/api/protected/dashboard`, {
+    fetch(`${BASE_API_URL}/api/auth/me`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
@@ -228,8 +228,8 @@ function fetchUserData() {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success && data.data && data.data.farmer) {
-            document.getElementById('user-greeting').textContent = `Hello, ${data.data.farmer.name}!`;
+        if (data.success && data.user) {
+            document.getElementById('user-greeting').textContent = `Hello, ${data.user.name}!`;
         } else {
             document.getElementById('user-greeting').textContent = 'Welcome!';
         }
@@ -369,50 +369,40 @@ function loadInsightsPage() {
         return;
     }
     
-    fetch(`${BASE_API_URL}/api/protected/dashboard`, {
+    // Get dashboard scores for the authenticated user
+    return fetch(`${API_BASE}/api/scores/dashboard`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
         }
     })
-    .then(response => response.json())
-    .then(data => {
-        // Log the response data for debugging
-        console.log('Dashboard API response:', data);
-        
-        if (data.success && data.data && data.data.farmer) {
-            const farmerId = data.data.farmer.id;
-            
-            // Get dashboard scores for that farmer using the correct endpoint
-            return fetch(`${API_BASE}/api/scores/dashboard/${farmerId}`)
-                .then(res => {
-                    console.log('Scores API response status:', res.status);
-                    return res.json();
-                })
-                .then(scoreData => {
-                    console.log('Scores API response data:', scoreData);
-                    if (scoreData.success) {
-                        return {
-                            farmer: data.data.farmer,
-                            scores: scoreData.scores
-                        };
-                    } else {
-                        throw new Error('Failed to fetch dashboard scores: ' + (scoreData.message || 'Unknown error'));
-                    }
-                });
+    .then(res => {
+        console.log('Scores API response status:', res.status);
+        return res.json();
+    })
+    .then(scoreData => {
+        console.log('Scores API response data:', scoreData);
+        if (scoreData.success) {
+            // Get user data from the auth/me endpoint
+            return fetch(`${API_BASE}/api/auth/me`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(userRes => userRes.json())
+            .then(userData => {
+                if (userData.success && userData.user) {
+                    return {
+                        farmer: userData.user,
+                        scores: scoreData.scores
+                    };
+                } else {
+                    throw new Error('Failed to fetch user data: ' + (userData.message || 'Unknown error'));
+                }
+            });
         } else {
-            // Provide more detailed error information
-            let errorMessage = 'Failed to fetch user data';
-            if (!data) {
-                errorMessage += ': No data received from server';
-            } else if (!data.success) {
-                errorMessage += ': API returned success=false';
-            } else if (!data.data) {
-                errorMessage += ': No data field in response';
-            } else if (!data.data.farmer) {
-                errorMessage += ': No farmer data in response';
-            }
-            throw new Error(errorMessage);
+            throw new Error('Failed to fetch dashboard scores: ' + (scoreData.message || 'Unknown error'));
         }
     })
     .then(({ farmer, scores }) => {
@@ -598,24 +588,24 @@ function loadReportsPage() {
         return;
     }
     
-    fetch(`${API_BASE}/api/protected/dashboard`, {
+    // Get user data first
+    fetch(`${API_BASE}/api/auth/me`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${authToken}`
         }
     })
     .then(response => {
-        console.log('Dashboard API response status:', response.status);
+        console.log('User API response status:', response.status);
         return response.json();
     })
-    .then(dashboardData => {
+    .then(userData => {
         // Log the response data for debugging
-        console.log('Dashboard API response:', dashboardData);
+        console.log('User API response:', userData);
         
-        if (dashboardData.success && dashboardData.data && dashboardData.data.farmer) {
-            const farmerId = dashboardData.data.farmer.id;
-            // Now fetch the monthly report for this farmer using the correct endpoint
-            return fetch(`${API_BASE}/api/monthly-reports/monthly/${farmerId}`, {
+        if (userData.success && userData.user) {
+            // Now fetch the monthly report for the authenticated user
+            return fetch(`${API_BASE}/api/monthly-reports/monthly`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${authToken}`
@@ -628,23 +618,13 @@ function loadReportsPage() {
             .then(monthlyReportData => {
                 console.log('Monthly report API response data:', monthlyReportData);
                 if (monthlyReportData.success && monthlyReportData.report) {
-                    // Now fetch badges for this farmer
-                    return fetch(`${API_BASE}/api/scores/badges/${farmerId}`, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`
-                        }
-                    })
-                    .then(badgesResponse => badgesResponse.json())
-                    .then(badgesData => {
-                        console.log('Badges API response data:', badgesData);
-                        return {
-                            farmer: dashboardData.data.farmer,
-                            actions: dashboardData.data.actions || [],
-                            badges: badgesData.success && badgesData.badges ? badgesData.badges : [],
-                            monthlyReport: monthlyReportData.report
-                        };
-                    });
+                    // Return data without badges since there's no badges endpoint
+                    return {
+                        farmer: userData.user,
+                        actions: [], // actions would need to be fetched separately if needed
+                        badges: [], // badges not available
+                        monthlyReport: monthlyReportData.report
+                    };
                 } else {
                     // Provide more detailed error information for monthly report
                     let errorMessage = 'Failed to fetch monthly report data';

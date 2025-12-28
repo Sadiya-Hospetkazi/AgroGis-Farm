@@ -6,32 +6,31 @@ const getMonthlyReport = async (req, res) => {
     try {
         const userId = req.userId; // Get user ID from authenticated request
         
-        // Get actions for this user
-        const farmerActionsResult = await pool.query('SELECT * FROM actions WHERE farmer_id = $1', [userId]);
-        const farmerActions = farmerActionsResult.rows;
+        // Get scores for this user
+        const scoresResult = await pool.query('SELECT * FROM scores WHERE farmer_id = $1', [userId]);
+        const scores = scoresResult.rows;
         
         // Get total score for this user
         const totalScoreResult = await pool.query('SELECT SUM(score) as total_score FROM scores WHERE farmer_id = $1', [userId]);
         
-        // Group actions by type for the report
-        const actionCounts = {};
+        // Group scores by action type for the report
+        const scoreTotals = {};
         let totalScore = totalScoreResult.rows[0].total_score || 0;
         
-        farmerActions.forEach(action => {
-            const actionType = action.type;
-            if (!actionCounts[actionType]) {
-                actionCounts[actionType] = 0;
+        scores.forEach(score => {
+            const actionType = score.action_type || score.category;
+            if (!scoreTotals[actionType]) {
+                scoreTotals[actionType] = 0;
             }
-            actionCounts[actionType]++;
+            scoreTotals[actionType] += score.score;
         });
         
         // Map to specific report categories
-        const watering = actionCounts['Watering'] || actionCounts['watering'] || 0;
-        const weeding = actionCounts['Weeding'] || actionCounts['weeding'] || 0;
-        const fertilizing = actionCounts['Fertilizing'] || actionCounts['fertilizing'] || 0;
-        const irrigation = actionCounts['Irrigation'] || actionCounts['irrigation'] || 0;
-        const monitoring = actionCounts['Crop Monitoring'] || actionCounts['Monitoring'] || 
-                          actionCounts['crop monitoring'] || actionCounts['monitoring'] || 0;
+        const watering = scoreTotals['watering'] || scoreTotals['water'] || 0;
+        const weeding = scoreTotals['weeding'] || scoreTotals['weed'] || 0;
+        const fertilizing = scoreTotals['fertilizing'] || scoreTotals['fertilizer'] || 0;
+        const irrigation = scoreTotals['irrigation'] || 0;
+        const monitoring = scoreTotals['monitoring'] || 0;
         
         res.json({
             success: true,
