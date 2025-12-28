@@ -14,12 +14,12 @@ const register = async (req, res) => {
       });
     }
 
-    const result = await pool.query(
+    const existing = await pool.query(
       'SELECT id FROM users WHERE email = $1',
       [email]
     );
 
-    if (result.rows.length > 0) {
+    if (existing.rows.length > 0) {
       return res.status(409).json({
         success: false,
         message: 'User already exists'
@@ -28,15 +28,26 @@ const register = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await pool.query(
+    const result = await pool.query(
       `INSERT INTO users (name, email, password, phone, location, language)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, name, email`,
       [name, email, hashedPassword, phone, location, language || 'en']
+    );
+
+    const user = result.rows[0];
+
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET || 'agrogig_secret_key',
+      { expiresIn: '1d' }
     );
 
     res.status(201).json({
       success: true,
-      message: 'User registered successfully'
+      message: 'Registration successful',
+      token,
+      user: { id: user.id, name: user.name, email: user.email }
     });
 
   } catch (error) {
@@ -67,24 +78,15 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user.id },
+      { id: user.id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
-    res.json({
-      success: true,
-      token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email
-      }
-    });
-
-  } catch (error) {
-    console.error('LOGIN ERROR:', error);
-    res.status(500).json({ success: false, message: error.message });
+    res.json({ success: true, token, user: { id: user.id, name: user.name, email } });
+  } catch (err) {
+    console.error('LOGIN ERROR:', err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
@@ -107,9 +109,9 @@ const getCurrentUser = async (req, res) => {
       user: result.rows[0]
     });
 
-  } catch (error) {
-    console.error('GET USER ERROR:', error);
-    res.status(500).json({ success: false, message: error.message });
+  } catch (err) {
+    console.error('GET USER ERROR:', err);
+    res.status(500).json({ success: false, message: err.message });
   }
 };
 
