@@ -356,10 +356,54 @@
                     
                     recognition.start();
                     
-                    recognition.onresult = function(event) {
+                    recognition.onresult = async function(event) {
                         const transcript = event.results[0][0].transcript;
-                        userInput.value = transcript;
-                        sendMessage();
+                        
+                        alert(`You said: "${transcript}"`);
+                        
+                        // Detect action type from transcript
+                        const actionType = detectAction(transcript);
+                        
+                        // Check if this sounds like a farming action
+                        if (actionType !== 'General Activity') {
+                            // Log the action to the backend
+                            const token = localStorage.getItem('agrogig_token');
+                            if (!token) {
+                                alert('Please login again');
+                                return;
+                            }
+                            
+                            try {
+                                const res = await fetch(`${BASE_API_URL}/api/actions/log`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify({
+                                        type: actionType,
+                                        description: transcript
+                                    })
+                                });
+                                
+                                const data = await res.json();
+                                
+                                if (!res.ok) {
+                                    alert(data.message || 'Failed to log action');
+                                } else {
+                                    alert('✅ Action logged successfully!');
+                                    // Update the input field with the transcript so user can send it to chatbot too if desired
+                                    userInput.value = transcript;
+                                }
+                            } catch (err) {
+                                console.error(err);
+                                alert('Server error while logging action');
+                            }
+                        } else {
+                            // If not a farming action, just put it in the input field for chatbot
+                            userInput.value = transcript;
+                            sendMessage();
+                        }
                     };
                     
                     recognition.onerror = function(event) {
@@ -368,6 +412,17 @@
                 } else {
                     alert('Speech recognition not supported in this browser.');
                 }
+            }
+            
+            // Function to detect action type from text
+            function detectAction(text) {
+                text = text.toLowerCase();
+                if (text.includes('water') || text.includes('irrigation')) return 'watering';
+                if (text.includes('weed') || text.includes('weeding')) return 'weeding';
+                if (text.includes('fertil') || text.includes('fertilizer')) return 'fertilizing';
+                if (text.includes('soil')) return 'soil';
+                if (text.includes('monitor') || text.includes('check')) return 'monitoring';
+                return 'General Activity';
             }
             
             // Sidebar toggle functionality

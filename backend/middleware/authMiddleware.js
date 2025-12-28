@@ -1,6 +1,6 @@
 // Authentication middleware for AgroGig
 const jwt = require('jsonwebtoken');
-const { pool } = require('../config/db');
+const pool = require('../config/db');
 
 const authenticateToken = async (req, res, next) => {
     // Get the token from the Authorization header

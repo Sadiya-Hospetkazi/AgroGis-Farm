@@ -79,7 +79,7 @@ const login = async (req, res) => {
 
     const token = jwt.sign(
       { id: user.id, email: user.email },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET || 'agrogig_secret_key',
       { expiresIn: '1d' }
     );
 
