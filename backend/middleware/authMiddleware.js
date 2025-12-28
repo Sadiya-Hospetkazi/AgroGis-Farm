@@ -1,23 +1,19 @@
-// Authentication middleware for AgroGig
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+module.exports = (req, res, next) => {
+  const header = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Token missing' });
+  if (!header) {
+    return res.status(401).json({ message: "No token" });
   }
 
-  const token = authHeader.split(' ')[1];
+  const token = header.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'agrogig_secret_key');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
-    req.userId = decoded.id;
     next();
-  } catch (err) {
-    return res.status(401).json({ message: 'Token invalid or expired' });
+  } catch (e) {
+    return res.status(401).json({ message: "Invalid token" });
   }
 };
-
-module.exports = authenticateToken;
