@@ -1,9 +1,18 @@
+// Load environment variables first
+require('dotenv').config();
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
 
-const authRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/auth"); // Using the original auth routes with /me endpoint
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const actionsRoutes = require("./routes/actions");
+const chatbotRoutes = require("./routes/chatbot");
+const reportsRoutes = require("./routes/reports");
+const scoresRoutes = require("./routes/scores");
+const protectedRoutes = require("./routes/protected");
+const monthlyReportsRoutes = require("./routes/monthlyReports");
 
 const app = express();
 
@@ -15,6 +24,12 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/actions", actionsRoutes);
+app.use("/api/chatbot", chatbotRoutes);
+app.use("/api/reports", reportsRoutes);
+app.use("/api/scores", scoresRoutes);
+app.use("/api/protected", protectedRoutes);
+app.use("/api/monthly-reports", monthlyReportsRoutes);
 
 // Serve frontend files
 app.get("/", (req, res) => {
@@ -62,7 +77,7 @@ app.get("/logout", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/pages/logout.html"));
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log("Server running on port", PORT);
 });

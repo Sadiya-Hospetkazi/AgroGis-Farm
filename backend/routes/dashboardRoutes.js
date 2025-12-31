@@ -43,4 +43,32 @@ router.get("/scores", auth, async (req, res) => {
   }
 });
 
+// Get user profile
+router.get("/profile", auth, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    const result = await pool.query(
+      'SELECT id, name, email, phone, location, language FROM users WHERE id = $1', 
+      [userId]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    
+    res.json({
+      success: true,
+      user: result.rows[0]
+    });
+  } catch (err) {
+    console.error('Profile endpoint error:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to fetch profile',
+      error: err.message
+    });
+  }
+});
+
 module.exports = router;

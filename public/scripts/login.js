@@ -37,12 +37,13 @@ function handleLogin(e) {
     .then(({ status, data }) => {
         console.log('Parsed response:', { status, data });
         
-        if (status >= 200 && status < 300 && data.success) {
+        if (status >= 200 && status < 300 && data.token) {
             // Store token in localStorage
             localStorage.setItem('agrogig_token', data.token);
+            localStorage.setItem('agrogig_user', JSON.stringify(data.user));
             
             // Redirect to dashboard
-            window.location.href = 'dashboard-professional.html';
+            window.location.href = '/dashboard-professional';
         } else {
             const errorMessage = data.message || data.error || 'Login failed. Please try again.';
             alert('Login failed: ' + errorMessage);

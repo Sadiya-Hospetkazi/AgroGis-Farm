@@ -41,18 +41,19 @@ function handleRegister(e) {
     .then(({ status, data }) => {
         console.log('Parsed response:', { status, data });
         
-        if (status >= 200 && status < 300 && data.success) {
+        if (status >= 200 && status < 300) {
             // Auto-login after successful registration - store token if available
             if (data.token) {
                 localStorage.setItem('agrogig_token', data.token);
+                localStorage.setItem('agrogig_user', JSON.stringify(data.user));
                 console.log('User automatically logged in after registration');
                 
                 // Redirect to dashboard
-                window.location.href = 'dashboard-professional.html';
+                window.location.href = '/dashboard-professional';
             } else {
                 // Fallback: show success message and redirect to login
                 alert('Registration successful! Please login with your credentials.');
-                window.location.href = 'login.html';
+                window.location.href = '/login';
             }
         } else {
             const errorMessage = data.message || data.error || 'Registration failed. Please try again.';
