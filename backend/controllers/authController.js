@@ -93,7 +93,7 @@ const login = async (req, res) => {
 // GET CURRENT USER (PROFILE)
 const getCurrentUser = async (req, res) => {
   try {
-    const userId = req.userId;
+    const userId = req.user.id;
 
     const result = await pool.query(
       'SELECT id, name, email, phone, location, language FROM users WHERE id = $1',

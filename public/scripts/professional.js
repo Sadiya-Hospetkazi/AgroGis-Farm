@@ -1,5 +1,8 @@
 // AgroGig Professional Dashboard JavaScript
 
+// Global variable to store dashboard data
+window.dashboardData = null;
+
 // Store JWT token in localStorage
 let authToken = localStorage.getItem('agrogig_token');
 
@@ -242,9 +245,11 @@ function fetchUserData() {
 
 // Function to log an action
 function logAction(actionType) {
-    console.log('logAction called with authToken:', authToken);
+    // Read the token fresh each time
+    const currentToken = localStorage.getItem('agrogig_token');
+    console.log('logAction called with authToken:', currentToken);
     
-    if (!authToken) {
+    if (!currentToken) {
         alert('You must be logged in to log actions');
         window.location.href = '/login.html';
         return;
@@ -257,7 +262,7 @@ function logAction(actionType) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authToken}`
+            'Authorization': `Bearer ${currentToken}`
         },
         body: JSON.stringify({
             type: actionType,
@@ -383,6 +388,10 @@ function loadInsightsPage() {
     .then(scoreData => {
         console.log('Scores API response data:', scoreData);
         if (scoreData.success) {
+            // Store the score data in global variable
+            window.dashboardData = scoreData;
+            console.log('Dashboard data loaded:', window.dashboardData);
+            
             // Get user data from the auth/me endpoint
             return fetch(`${API_BASE}/api/auth/me`, {
                 method: 'GET',
@@ -639,16 +648,14 @@ function loadReportsPage() {
                 }
             });
         } else {
-            // Provide more detailed error information for dashboard data
-            let errorMessage = 'Failed to fetch dashboard data';
-            if (!dashboardData) {
+            // Provide more detailed error information for user data
+            let errorMessage = 'Failed to fetch user data';
+            if (!userData) {
                 errorMessage += ': No data received from server';
-            } else if (!dashboardData.success) {
+            } else if (!userData.success) {
                 errorMessage += ': API returned success=false';
-            } else if (!dashboardData.data) {
-                errorMessage += ': No data field in response';
-            } else if (!dashboardData.data.farmer) {
-                errorMessage += ': No farmer data in response';
+            } else if (!userData.user) {
+                errorMessage += ': No user field in response';
             }
             throw new Error(errorMessage);
         }
@@ -2094,6 +2101,11 @@ function fetchUserProfile() {
     })
     .then(data => {
         console.log('Profile API response data:', data);
+        
+        // Store the data in global variable
+        window.dashboardData = data;
+        console.log('Dashboard data loaded in profile:', window.dashboardData);
+        
         if (data.success && data.user) {
             const user = data.user;
             document.getElementById('fullName').textContent = user.name || 'Not specified';
